@@ -1,0 +1,24 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - run: yarn install --frozen-lockfile
+
+      - run: |
+          yarn build
+          cp index.html dist/index.html
+          sed -i 's/dist\/bundle.js/bundle.js/g' dist/index.html
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages
+          folder: dist

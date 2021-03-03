@@ -31,5 +31,22 @@ export default class TwigPluginUI extends Plugin {
 
 			return buttonView;
 		} );
+
+		editor.ui.componentFactory.add( 'twigStatementWithContent', locale => {
+			const command = editor.commands.get( 'insertTwigStatementWithContent' );
+			const buttonView = new ButtonView( locale );
+
+			buttonView.set( {
+				label: t( 'Statement with content' ),
+				withText: true,
+				tooltip: true
+			} );
+
+			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
+
+			this.listenTo( buttonView, 'execute', () => editor.execute( 'insertTwigStatementWithContent' ) );
+
+			return buttonView;
+		} );
 	}
 }

@@ -1,6 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
-export default class InsertTwigStatementCommand extends Command {
+export class InsertTwigStatementCommand extends Command {
 	execute() {
 		this.editor.model.change( writer => {
 			this.editor.model.insertContent( createTwigStatement( writer ) );
@@ -8,12 +8,28 @@ export default class InsertTwigStatementCommand extends Command {
 	}
 
 	refresh() {
-		const model = this.editor.model;
-		const selection = model.document.selection;
-		const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigStatementContainer' );
-
-		this.isEnabled = allowedIn !== null;
+		refreshStatement.bind( this )();
 	}
+}
+
+export class InsertTwigStatementWithContentCommand extends Command {
+	execute() {
+		this.editor.model.change( writer => {
+			this.editor.model.insertContent( createTwigStatement( writer, true ) );
+		} );
+	}
+
+	refresh() {
+		refreshStatement.bind( this )();
+	}
+}
+
+function refreshStatement() {
+	const model = this.editor.model;
+	const selection = model.document.selection;
+	const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigStatementContainer' );
+
+	this.isEnabled = allowedIn !== null;
 }
 
 function createTwigStatement( writer, withContent ) {

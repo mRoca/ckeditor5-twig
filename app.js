@@ -9,16 +9,17 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import TwigPlugin from './twig/twigplugin';
 
+import prettydiff from 'prettydiff';
+import hljs from 'highlight.js';
+
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
-		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigStatement' ]
+		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigStatement', 'twigStatementWithContent' ]
 	} )
 	.then( editor => {
-		console.log( 'Editor was initialized with inspector', editor );
-
 		// Add the inspector (see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)
-		CKEditorInspector.attach( editor );
+		CKEditorInspector.attach( editor, { isCollapsed: true } );
 
 		// Expose for playing in the console.
 		window.editor = editor;
@@ -26,3 +27,17 @@ ClassicEditor
 	.catch( error => {
 		console.error( error.stack );
 	} );
+
+window.displaySource = function() {
+	prettydiff.options.mode = 'beautify';
+	prettydiff.options.language = 'twig';
+	prettydiff.options.force_indent = true;
+	prettydiff.options.source = window.editor.getData();
+
+	document.getElementById( 'output' ).innerText = prettydiff();
+	hljs.highlightBlock( document.getElementById( 'output' ) );
+};
+
+document.addEventListener( 'DOMContentLoaded', () => {
+	window.displaySource();
+} );

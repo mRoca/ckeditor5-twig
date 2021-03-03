@@ -21,41 +21,39 @@ export default class TwigDataProcessor {
 }
 
 function twig2html( content ) {
+	// Comments: {# $1 #}
+	content = content.replace( /{#-?\s*((?:(?!\s*-?}}).)*)\s*-?#}/gs, ( match, content ) => twigComment( content ) );
+
 	// Expressions: {{ $1 }}
-	content = content.replace( /{{-?\s*((?:(?!}}).)*)\s*-?}}/gs, ( match, content ) => {
-		// Any {{ }} content
-		return twigExpression( content );
-	} );
+	content = content.replace( /{{-?\s*((?:(?!\s*-?}}).)*)\s*-?}}/gs, ( match, content ) => twigExpression( content ) );
+
+	// Single-line block statement: {% block foobar content %}
+	content = content.replace( /{%-?\s*block ((?:(?!%})\S)+)\s+((?:(?!\s*-?%}).)+)\s*-?%}/gs, ( match, blockName, blockContent ) => twigStatementOpen( `block ${ blockName } ${ blockContent }` ) + twigStatementClose() );
 
 	// Parent statements: {% $1 %}$2{% end$1 %}
-	// TODO Deal with nested tags
-	// TODO Deal with "else" ("if" and "for")
-	const parentTags = [ 'if', 'for', 'block' ];
-	parentTags.forEach( tag => {
-		const reg = new RegExp( `{%-?\\s*(?<statement>${ tag }\\s+(?<condition>(?:(?!%}).)*))\\s*-?%}(?<content>(?:(?!{%\\s*end${ tag }\\s*%}).)*){%-?\\s*end${ tag }\\s*-?%}`, 'gs' );
+	const usedParentStatements = [ ...new Set( [ ...content.matchAll( /{%-?\s*end(?<tag>\w+)\s*-?%}/gs ) ].map( match => match.groups.tag ) ) ];
+	usedParentStatements.forEach( tag => {
+		// Beginning of statement : {% $1 foobar %}
+		content = content.replace( new RegExp( `{%-?\\s*(${ tag }\\s+((?:(?!\\s*-?%}).)*))\\s*-?%}`, 'g' ), ( match, contents ) => twigStatementOpen( contents, true ) );
 
-		while ( content.match( reg ) ) {
-			content = content.replace( reg, ( match, ...args ) => {
-				const groups = args.pop();
-				return twigStatement( groups.statement, groups.content );
-			} );
-		}
+		// End of statements: {% end$1 %}
+		content = content.replace( new RegExp( `{%-?\\s*end${ tag }\\s*-?%}`, 'gs' ), () => twigStatementClose( true ) );
 	} );
 
-	// Statements: {% $1 %}
-	content = content.replace( /{%-?\s*((?:(?!%}).)*)\s*-?%}/gs, ( match, contents ) => {
-		// Any {% %} content
-		return twigStatement( contents );
-	} );
+	// All other statements: {% $1 %}
+	content = content.replace( /{%-?\s*((?:(?!\s*-?%}).)*)\s*-?%}/g, ( match, contents ) => twigStatementOpen( contents ) + twigStatementClose() );
 
-	// TODO here we can find "else" parts by parsing the dom
+	// TODO here we can find "else" parts by parsing the dom ("if" and "for")
 
-	function twigStatement( statement, content ) {
+	function twigStatementOpen( statement, withContent ) {
 		statement = statement.trim();
-		content = ( content || '' ).trim();
 
 		const elContainer = document.createElement( 'section' );
 		elContainer.className = 'twig-statement-container';
+
+		if ( withContent ) {
+			elContainer.className += ' twig-statement-with-content';
+		}
 
 		const elStatement = document.createElement( 'div' );
 		elStatement.className = 'twig-statement';
@@ -82,14 +80,20 @@ function twig2html( content ) {
 
 		elContainer.append( elStatement );
 
-		if ( content ) {
+		if ( withContent ) {
 			const elContent = document.createElement( 'div' );
 			elContent.className = 'twig-statement-content';
-			elContent.innerHTML = content;
 			elContainer.append( elContent );
 		}
 
-		return elContainer.outerHTML;
+		return elContainer.outerHTML.replace( twigStatementClose( withContent ), '' );
+	}
+
+	function twigStatementClose( withContent ) {
+		if ( withContent ) {
+			return '</div></section>';
+		}
+		return '</section>';
 	}
 
 	function twigExpression( content ) {
@@ -102,9 +106,57 @@ function twig2html( content ) {
 		return el.outerHTML;
 	}
 
+	function twigComment( content ) {
+		content = content.trim();
+
+		const el = document.createElement( 'div' );
+		el.className = 'twig-comment';
+		el.innerText = content;
+
+		return el.outerHTML;
+	}
+
 	return content;
 }
 
 function html2twig( content ) {
-	return content;
+	const parser = new DOMParser();
+	const doc = parser.parseFromString( content, 'text/html' );
+
+	// Comments: {# $1 #}
+	Array.from( doc.getElementsByClassName( 'twig-comment' ) ).forEach( el => {
+		el.parentNode.replaceChild( document.createTextNode( `{# ${ el.innerHTML } #}` ), el );
+	} );
+
+	// Expressions: {{ $1 }}
+	Array.from( doc.getElementsByClassName( 'twig-expression' ) ).forEach( el => {
+		el.parentNode.replaceChild( document.createTextNode( `{{ ${ el.innerHTML } }}` ), el );
+	} );
+
+	// Statements: {% $1 %}
+	while ( doc.getElementsByClassName( 'twig-statement-container' ).length ) {
+		const el = doc.getElementsByClassName( 'twig-statement-container' )[ 0 ];
+
+		( function( el ) {
+			const parentEl = el.parentNode;
+			const statement = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement' ) )[ 0 ];
+			if ( !statement ) {
+				return;
+			}
+
+			const content = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement-content' ) )[ 0 ];
+			if ( !content ) {
+				parentEl.replaceChild( document.createTextNode( `{% ${ statement.innerHTML } %}` ), el );
+				return;
+			}
+
+			const tag = statement.innerHTML.match( /^\s*(\w+)/ )[ 0 ];
+			const contentEl = document.createElement( 'div' );
+			contentEl.innerHTML = '<!--TEMP_PLACEHOLDER-->';
+			parentEl.replaceChild( contentEl, el );
+			parentEl.innerHTML = parentEl.innerHTML.replace( '<div><!--TEMP_PLACEHOLDER--></div>', `{% ${ statement.innerHTML } %}${ content.innerHTML }{% end${ tag } %}` );
+		}( el ) );
+	}
+
+	return doc.body.innerHTML;
 }

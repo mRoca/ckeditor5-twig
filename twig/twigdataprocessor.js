@@ -139,22 +139,24 @@ function html2twig( content ) {
 
 		( function( el ) {
 			const parentEl = el.parentNode;
-			const statement = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement' ) )[ 0 ];
-			if ( !statement ) {
+			const statementEl = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement' ) )[ 0 ];
+			if ( !statementEl ) {
 				return;
 			}
 
+			const statement = statementEl.textContent.trim();
 			const content = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement-content' ) )[ 0 ];
 			if ( !content ) {
-				parentEl.replaceChild( document.createTextNode( `{% ${ statement.innerHTML } %}` ), el );
+				parentEl.replaceChild( document.createTextNode( `{% ${ statement } %}` ), el );
 				return;
 			}
 
-			const tag = statement.innerHTML.match( /^\s*(\w+)/ )[ 0 ];
+			const tagArr = statement.match( /^\s*(\w+)/ );
+			const tag = tagArr ? tagArr[ 0 ] : '';
 			const contentEl = document.createElement( 'div' );
 			contentEl.innerHTML = '<!--TEMP_PLACEHOLDER-->';
 			parentEl.replaceChild( contentEl, el );
-			parentEl.innerHTML = parentEl.innerHTML.replace( '<div><!--TEMP_PLACEHOLDER--></div>', `{% ${ statement.innerHTML } %}${ content.innerHTML }{% end${ tag } %}` );
+			parentEl.innerHTML = parentEl.innerHTML.replace( '<div><!--TEMP_PLACEHOLDER--></div>', `{% ${ statement } %}${ content.innerHTML }{% end${ tag } %}` );
 		}( el ) );
 	}
 

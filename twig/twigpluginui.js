@@ -15,38 +15,28 @@ export default class TwigPluginUI extends Plugin {
 			'Statement': 'Statement'
 		} );
 
-		editor.ui.componentFactory.add( 'twigStatement', locale => {
-			const command = editor.commands.get( 'insertTwigStatement' );
-			const buttonView = new ButtonView( locale );
+		const addButton = ( componentName, commandName, buttonLabel ) => {
+			editor.ui.componentFactory.add( componentName, locale => {
+				const command = editor.commands.get( commandName );
+				const buttonView = new ButtonView( locale );
 
-			buttonView.set( {
-				label: t( 'Statement' ),
-				withText: true,
-				tooltip: true
+				buttonView.set( {
+					label: t( buttonLabel ),
+					withText: true,
+					tooltip: true
+				} );
+
+				buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
+
+				this.listenTo( buttonView, 'execute', () => editor.execute( commandName ) );
+
+				return buttonView;
 			} );
+		};
 
-			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-
-			this.listenTo( buttonView, 'execute', () => editor.execute( 'insertTwigStatement' ) );
-
-			return buttonView;
-		} );
-
-		editor.ui.componentFactory.add( 'twigStatementWithContent', locale => {
-			const command = editor.commands.get( 'insertTwigStatementWithContent' );
-			const buttonView = new ButtonView( locale );
-
-			buttonView.set( {
-				label: t( 'Statement with content' ),
-				withText: true,
-				tooltip: true
-			} );
-
-			buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-
-			this.listenTo( buttonView, 'execute', () => editor.execute( 'insertTwigStatementWithContent' ) );
-
-			return buttonView;
-		} );
+		addButton( 'twigComment', 'insertTwigExpression', 'Comment' );
+		addButton( 'twigExpression', 'insertTwigExpression', 'Expression' );
+		addButton( 'twigStatement', 'insertTwigStatement', 'Statement' );
+		addButton( 'twigStatementWithContent', 'insertTwigStatementWithContent', 'Statement with content' );
 	}
 }

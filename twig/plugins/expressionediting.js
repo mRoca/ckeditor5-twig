@@ -29,7 +29,7 @@ export default class ExpressionEditing extends Plugin {
 		schema.register( 'twigExpression', {
 			isInline: true,
 			isObject: true,
-			allowWhere: '$text',
+			allowIn: '$block',
 			allowAttributes: [ 'content' ]
 		} );
 

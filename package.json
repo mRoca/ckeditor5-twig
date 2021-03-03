@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-inspector": "^2.2.2",
+    "css-loader": "^5.1.1",
     "eslint": "^7.20.0",
     "eslint-config-ckeditor5": "^3.1.0",
     "highlight.js": "^10.6.0",

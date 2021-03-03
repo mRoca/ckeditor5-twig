@@ -6,16 +6,23 @@ import List from '@ckeditor/ckeditor5-list/src/list';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 
-import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
+/* twig plugin files */
 import TwigPlugin from './twig/twigplugin';
+import './twig/plugin.css';
 
+/* demo page scripts */
+import CKEditorInspector from '@ckeditor/ckeditor5-inspector';
 import prettydiff from 'prettydiff';
 import hljs from 'highlight.js';
+
+/* demo page style */
+import './demo.css';
+import 'highlight.js/styles/agate.css';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
-		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigStatement', 'twigStatementWithContent' ]
+		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigExpression', 'twigStatement', 'twigStatementWithContent' ]
 	} )
 	.then( editor => {
 		// Add the inspector (see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)

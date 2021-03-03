@@ -32,7 +32,8 @@ export default class TwigPluginEditing extends Plugin {
 		schema.register( 'twigStatement', {
 			isLimit: true,
 			allowIn: 'twigStatementContainer',
-			isBlock: true
+			isBlock: true,
+			allowContentOf: '$text'
 		} );
 
 		schema.extend( '$text', {
@@ -47,6 +48,9 @@ export default class TwigPluginEditing extends Plugin {
 			allowIn: 'twigStatementContainer',
 			allowContentOf: '$root'
 		} );
+
+		// TODO Find a way to avoid a new Paragraph adding into this element:
+		// https://github.com/ckeditor/ckeditor5-paragraph/blob/b54105be2906b887f4d32a7f447b5bb0fb1d216c/src/paragraph.js#L122-L137
 	}
 
 	_defineConverters() {
@@ -99,10 +103,9 @@ export default class TwigPluginEditing extends Plugin {
 		conversion.for( 'editingDowncast' ).elementToElement( {
 			model: 'twigStatement',
 			view: ( modelElement, { writer: viewWriter } ) => {
-				// Note: You use a more specialized createEditableElement() method here.
-				const h1 = viewWriter.createEditableElement( 'pre', { class: 'twig-statement' } );
+				const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-statement' } );
 
-				return toWidgetEditable( h1, viewWriter );
+				return toWidgetEditable( pre, viewWriter );
 			}
 		} );
 
@@ -124,7 +127,6 @@ export default class TwigPluginEditing extends Plugin {
 		conversion.for( 'editingDowncast' ).elementToElement( {
 			model: 'twigStatementContent',
 			view: ( modelElement, { writer: viewWriter } ) => {
-				// Note: You use a more specialized createEditableElement() method here.
 				const div = viewWriter.createEditableElement( 'div', { class: 'twig-statement-content' } );
 
 				return toWidgetEditable( div, viewWriter );

@@ -1,0 +1,11 @@
+body > div {
+    width: 50%;
+    margin: 0;
+    float: left;
+    padding-bottom: 50px;
+}
+
+#output-container {
+    width: 100%;
+    overflow-x: auto;
+}

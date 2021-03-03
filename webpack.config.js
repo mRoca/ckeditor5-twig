@@ -43,6 +43,13 @@ module.exports = {
 						} )
 					}
 				]
+			},
+
+			// Demo css
+			{
+				test: /\.css$/i,
+				exclude: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+				use: [ 'style-loader', 'css-loader' ]
 			}
 		]
 	},

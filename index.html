@@ -2,33 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CKEditor 5 - Twig template plugin</title>
+    <title>CKEditor 5 - Twig plugin</title>
 
+    <link rel="stylesheet" href="./node_modules/highlight.js/styles/agate.css">
     <style>
+        /* Demo page style */
+
+        body > div {
+            width: 50%;
+            margin: 0;
+            float: left;
+            padding-bottom: 50px;
+        }
+
+        #output-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Plugin style */
         .twig-statement-container {
-            padding: 10px;
+            padding: 4px;
             margin: 1em 0;
 
-            background: rgba( 0, 0, 0, 0.1 );
-            border: solid 1px hsl(0, 0%, 77%);
-            border-radius: 2px;
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .twig-statement, .twig-statement-content {
-            padding: 10px;
+            padding: 6px;
             margin: 0;
-
             background: #FFF;
             border: solid 1px hsl(0, 0%, 77%);
         }
 
         .twig-statement {
-            margin-bottom: 10px;
+            background: #dcb470;
+        }
+
+        .twig-statement {
+            background: #dcb470;
         }
 
         /*.twig-statement::before {*/
         /*    content: "if ";*/
         /*}*/
+
+        .twig-comment {
+            padding: 5px;
+            background: yellow;
+        }
+
+        .twig-comment::before {
+            content: "# ";
+        }
 
         .twig-expression {
             background: yellow;
@@ -45,50 +71,85 @@
     </style>
 </head>
 <body>
-<div id="editor">
-    {% set username = 'John Doe' %}
-    <h1>Welcome {{ username }} :-)</h1>
+<div>
+    <h2>Such a wonderful WYSIWYG <3</h2>
+    <div id="editor">
+        {# This is an example of twig parsing.
+        See the page source code in order to display the original twig template #}
 
-    <p>This is a CKEditor Twig template plugin demo.</p>
+        {% macro sayHello(name) %}
+            Hello {{name}}
+        {% endmacro %}
 
-    {% block 'welcome' %}
-        <p>There is a message for you:</p>
-        {% if planet == 'hearth' %}
-            <p>Hello world</p>
-        {% else %}
-            {% if galaxy == 'orion' %}
-                <p>Hello Gentle Rosenburg</p>
-            {% else %}
-                <p>Hello {{ planet }}</p>
-            {% endif %}
-        {% endif %}
-    {% endblock %}
+        {% set username = 'John Doe' %}
+        <h1>Welcome {{ username }} :-)</h1>
 
-    <div>
-        {% for country in countries %}
-            <p>Are you from {{ country }}?</p>
-        {% endfor %}
+        <p>This is a CKEditor Twig template plugin demo.</p>
+
+        {% block title "Template demo page" %}
+
+        {% block welcome %}
+            <p>There is a message for you:</p>
+            {% if planet == 'hearth' -%}
+                <p>{{ sayHello('world') }}</p>
+            {%- else -%}
+                <p>
+                    {% if galaxy == 'orion' %}
+                    {{ sayHello('Gentle Rosenburg') }}
+                    {% else %}
+                    {{ sayHello(planet) }}
+                    {% endif %}
+                    {% if isNotSoFar(galaxy) %} :-) {% else %} :-( {% endif %}
+                </p>
+            {%- endif %}
+        {% endblock %}
+
+        <div>
+            {% for country in countries %}
+                <p>Are you from {{ country }}?</p>
+            {% endfor %}
+        </div>
+
+        <h3>Known issues</h3>
+
+        <ul>
+            <li>
+                As the twig tags are replaced by a div, they cannot be used into a "ul" list without breaking the html:
+                <br>
+                <ul>
+                    {% for a in b %}
+                        <li>{{ a }}</li>
+                    {% endfor %}
+                </ul>
+                <ul>
+                    {# This comment should be replaced by a "li" tag, as it is located into an "ul" tag #}
+                    <li>This is a list item</li>
+                </ul>
+            </li>
+            <li>
+                Inline blocks are not handled for now: <br>
+                {% if a %}{% if b %}yes{% else %}no{% endif %}{% endif %}
+            </li>
+            <li>
+                "else" is not well supported for now
+            </li>
+        </ul>
+
+        <h3>TODO</h3>
+        <ul>
+            <li>Deal with inline & li statements</li>
+            <li>Allow to pass a list of typed variables</li>
+            <li>Use <a href="https://github.com/twigjs/twig.js">twig.js</a> for html & vars parsing & rendering</li>
+            <li>Add <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/saving-data.html">the
+                auto reload plugin</a> to the demo
+            </li>
+        </ul>
     </div>
+</div>
 
-    <h3>Known issues</h3>
-
-    <ul>
-        <li>
-            As the twig tags are replaced by a div, they cannot be used into a "ul" list without breaking the html: <br>
-            <ul>{% for a in b %}<li>{{ a }}</li>{% endfor %}</ul>
-        </li>
-        <li>
-            Nested blocks are not well handled for now (for in for, if in if, ...): <br>
-            {% if a %}{% if b %}yes{% else %}no{% endif %}{% endif %}
-        </li>
-        <li>
-            "else" is not well supported for now
-        </li>
-        <li>
-            Comments are not parsed: <br>
-            {# This comment is displayed as text for now #}
-        </li>
-    </ul>
+<div>
+    <button onclick="window.displaySource()">Refresh the output code :)</button>
+    <pre id="output-container"><code id="output" class="twig"></code></pre>
 </div>
 
 <script src="bundle.js"></script>

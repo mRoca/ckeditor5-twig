@@ -24,53 +24,7 @@ ClassicEditor
 		plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
 		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigCommands' ],
 		twig: {
-			variables: {
-				// Object
-				app: {
-					type: 'object',
-					label: 'The default symfony twig variables',
-					properties: {
-						// Child object
-						user: {
-							type: 'object',
-							label: 'The current user',
-							properties: {
-								username: { type: 'string', label: 'The current user\'s username' },
-								favoriteColors: {
-									type: 'array',
-									children: {
-										type: 'string'
-									}
-								}
-							}
-						},
-						// Boolean
-						debug: { type: 'boolean', label: 'Is the debug mode enabled?' }
-					}
-				},
-				currentDate: { type: 'datetime' },
-				planet: { type: 'string' },
-				galaxy: { type: 'string' },
-				// Array of objects
-				countries: {
-					type: 'array',
-					children: {
-						type: 'object',
-						properties: {
-							name: { type: 'string' },
-							code: { type: 'string' }
-						}
-					}
-				},
-				// Array of arrays
-				currentPositions: {
-					type: 'array',
-					children: {
-						type: 'array',
-						children: { type: 'float' }
-					}
-				}
-			}
+			variables: window.availableVariables // Defined in the index.html file
 		}
 	} )
 	.then( editor => {

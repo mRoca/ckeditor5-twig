@@ -18,7 +18,18 @@ ClassicEditor
             ...,
             twig: {
                 variables: {
-                    foo: { type: 'string', label: 'A foo variable you can use into your template' },
+                    username: { type: 'string', label: 'The current user\'s username' },
+                    country: {
+                        type: 'object',
+                        properties: {
+                            name: { type: 'string', label: 'The country name' },
+                            cities: {
+                                type: 'array',
+                                label: 'All the country\'s cities',
+                                children: { type: 'string', label: 'The city name' }
+                            },
+                        }
+                    },
                 }
             }
         }

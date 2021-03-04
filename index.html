@@ -5,7 +5,7 @@
     <title>CKEditor 5 - Twig plugin</title>
 </head>
 <body>
-<div>
+<div class="column">
     <h2>Such a wonderful WYSIWYG <3</h2>
     <div id="editor">
         {# This is an example of twig parsing.
@@ -40,7 +40,7 @@
 
         <div>
             {% for country in countries %}
-                <p>Are you from {{ country }}?</p>
+                <p>Are you from {{ country.name }}?</p>
             {% endfor %}
         </div>
 
@@ -85,11 +85,11 @@
     </div>
 </div>
 
-<div>
+<div class="column">
     <button onclick="window.displaySource()">Refresh the output code :)</button>
     <pre id="output-container"><code id="output" class="twig"></code></pre>
 </div>
 
-<script src="bundle.js"></script>
+<script src="bundle.js?t=1614892322"></script>
 </body>
 </html>

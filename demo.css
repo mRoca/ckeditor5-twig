@@ -1,4 +1,4 @@
-body > div {
+body > .column {
     width: 50%;
     margin: 0;
     float: left;

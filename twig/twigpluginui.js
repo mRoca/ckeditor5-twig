@@ -3,14 +3,20 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { add } from '@ckeditor/ckeditor5-utils/src/translation-service';
 import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import ListView from '@ckeditor/ckeditor5-ui/src/list/listview';
+import DisplayTwigVariablesUI from './plugins/variablesdisplayui';
 
 export default class TwigPluginUI extends Plugin {
+	static get requires() {
+		return [ DisplayTwigVariablesUI ];
+	}
+
 	init() {
 		const editor = this.editor;
 		const t = editor.t;
 
 		add( 'en', {
 			'twig.commands': 'Twig commands',
+			'twig.variables': 'Variables',
 			'twig.statement': '{% Statement %}',
 			'twig.statement-with-content': '{% Statement %} with content {% end %}',
 			'twig.comment': '{# Comment #}',
@@ -19,6 +25,7 @@ export default class TwigPluginUI extends Plugin {
 
 		add( 'fr', {
 			'twig.commands': 'Commandes Twig',
+			'twig.variables': 'Variables',
 			'twig.statement': '{% Block %}',
 			'twig.statement-with-content': '{% Block %} avec contenu {% end %}',
 			'twig.comment': '{# Commentaire #}',
@@ -50,6 +57,7 @@ export default class TwigPluginUI extends Plugin {
 
 			const listView = dropdownView.listView = new ListView( locale );
 
+			listView.items.add( createDropdownButton( 'displayTwigVariables', 'twig.variables' ) );
 			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.comment' ) );
 			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.expression' ) );
 			listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );

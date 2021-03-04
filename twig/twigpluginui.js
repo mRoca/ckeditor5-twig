@@ -1,6 +1,8 @@
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { add } from '@ckeditor/ckeditor5-utils/src/translation-service';
+import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
+import ListView from '@ckeditor/ckeditor5-ui/src/list/listview';
 
 export default class TwigPluginUI extends Plugin {
 	init() {
@@ -8,35 +10,59 @@ export default class TwigPluginUI extends Plugin {
 		const t = editor.t;
 
 		add( 'en', {
-			'Statement': 'Statement'
+			'twig.commands': 'Twig commands',
+			'twig.statement': '{% Statement %}',
+			'twig.statement-with-content': '{% Statement %} with content {% end %}',
+			'twig.comment': '{# Comment #}',
+			'twig.expression': '{{ Expression }}'
 		} );
 
 		add( 'fr', {
-			'Statement': 'Statement'
+			'twig.commands': 'Commandes Twig',
+			'twig.statement': '{% Block %}',
+			'twig.statement-with-content': '{% Block %} avec contenu {% end %}',
+			'twig.comment': '{# Commentaire #}',
+			'twig.expression': '{{ Expression }}'
 		} );
 
-		const addButton = ( componentName, commandName, buttonLabel ) => {
-			editor.ui.componentFactory.add( componentName, locale => {
-				const command = editor.commands.get( commandName );
+		editor.ui.componentFactory.add( 'twigCommands', locale => {
+			const dropdownView = createDropdown( locale );
+			dropdownView.buttonView.set( {
+				withText: true,
+				label: t( 'twig.commands' )
+			} );
+
+			const createDropdownButton = ( commandName, buttonLabel, buttonClass ) => {
 				const buttonView = new ButtonView( locale );
 
-				buttonView.set( {
-					label: t( buttonLabel ),
-					withText: true,
-					tooltip: true
-				} );
+				buttonView.set( { label: t( buttonLabel ), withText: true } );
 
+				if ( buttonClass ) {
+					buttonView.set( { class: buttonClass } );
+				}
+
+				const command = editor.commands.get( commandName );
 				buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-
 				this.listenTo( buttonView, 'execute', () => editor.execute( commandName ) );
 
 				return buttonView;
-			} );
-		};
+			};
 
-		addButton( 'twigComment', 'insertTwigExpression', 'Comment' );
-		addButton( 'twigExpression', 'insertTwigExpression', 'Expression' );
-		addButton( 'twigStatement', 'insertTwigStatement', 'Statement' );
-		addButton( 'twigStatementWithContent', 'insertTwigStatementWithContent', 'Statement with content' );
+			const listView = dropdownView.listView = new ListView( locale );
+
+			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.comment' ) );
+			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.expression' ) );
+			listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );
+			listView.items.add( createDropdownButton( 'insertTwigStatementWithContent', 'twig.statement-with-content' ) );
+
+			dropdownView.bind( 'isEnabled' ).toMany( listView.items, 'isEnabled',
+				( ...areEnabled ) => areEnabled.some( isEnabled => isEnabled )
+			);
+
+			dropdownView.panelView.children.add( listView );
+			listView.items.delegate( 'execute' ).to( dropdownView );
+
+			return dropdownView;
+		} );
 	}
 }

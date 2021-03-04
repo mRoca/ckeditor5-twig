@@ -2,6 +2,8 @@
 
 This plugin is not finished yet, but it'll be alive soon :-)
 
+Demo: [mroca.github.io/ckeditor5-twig](https://mroca.github.io/ckeditor5-twig/)
+
 ## Development
 
 ```bash

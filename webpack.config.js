@@ -45,7 +45,6 @@ module.exports = {
 				]
 			},
 
-			// Demo css
 			{
 				test: /\.css$/i,
 				exclude: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,

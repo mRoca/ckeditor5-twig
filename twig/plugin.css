@@ -6,6 +6,10 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
+.twig-statement {
+    background: #dcb470 !important;
+}
+
 .twig-statement, .twig-statement-content {
     padding: 6px;
     margin: 0;
@@ -13,21 +17,9 @@
     border: solid 1px hsl(0, 0%, 77%);
 }
 
-.twig-statement {
-    background: #dcb470;
-}
-
-.twig-statement {
-    background: #dcb470;
-}
-
-/*.twig-statement::before {*/
-/*    content: "if ";*/
-/*}*/
-
 .twig-comment {
-    padding: 5px;
     background: yellow;
+    padding: 5px;
 }
 
 .twig-comment::before {

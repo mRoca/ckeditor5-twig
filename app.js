@@ -22,7 +22,7 @@ import 'highlight.js/styles/agate.css';
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
-		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigExpression', 'twigStatement', 'twigStatementWithContent' ]
+		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigCommands' ]
 	} )
 	.then( editor => {
 		// Add the inspector (see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)

@@ -54,7 +54,7 @@ table.twig-variables tbody {
     padding: 3px;
 }
 table.twig-variables th, table.twig-variables td {
-    padding: 10px;
+    padding: 4px 10px;
     text-align: left;
 }
 table.twig-variables thead th {

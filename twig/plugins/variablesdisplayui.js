@@ -8,7 +8,7 @@ export default class DisplayTwigVariablesUI extends Plugin {
 		add( 'en', {
 			'twig.variables.name': 'Name',
 			'twig.variables.type': 'Type',
-			'twig.variables.label': 'Label',
+			'twig.variables.label': 'Description',
 			'twig.variables.type.object': 'Object',
 			'twig.variables.type.array': 'Array',
 			'twig.variables.type.string': 'String',

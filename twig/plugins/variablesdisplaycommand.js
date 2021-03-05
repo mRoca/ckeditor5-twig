@@ -12,7 +12,7 @@ export class DisplayTwigVariablesCommand extends Command {
 				title: t( 'twig.variables' ),
 				width: '80%',
 				html: this._createVariablesHtmlOutput( variables ),
-				footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/">https://twig.symfony.com<a>'
+				footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
 			} );
 		} );
 	}
@@ -237,6 +237,7 @@ Total: {{ ${ name }|length }}
 		}
 
 		if ( linkEl.href ) {
+			linkEl.target = '_blank';
 			linkEl.innerText = linkEl.href;
 			output.append( linkEl );
 		}

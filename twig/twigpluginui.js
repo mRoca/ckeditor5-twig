@@ -17,19 +17,19 @@ export default class TwigPluginUI extends Plugin {
 		add( 'en', {
 			'twig.commands': 'Twig commands',
 			'twig.variables': 'Variables',
-			'twig.statement': '{% Statement %}',
-			'twig.statement-with-content': '{% Statement %} with content {% end %}',
+			'twig.statement': '{% Tag %}',
+			'twig.statement-with-content': '{% Tag %} with content {% endTag %}',
 			'twig.comment': '{# Comment #}',
-			'twig.expression': '{{ Expression }}'
+			'twig.expression': '{{ Variable }}'
 		} );
 
 		add( 'fr', {
 			'twig.commands': 'Commandes Twig',
 			'twig.variables': 'Variables',
-			'twig.statement': '{% Block %}',
-			'twig.statement-with-content': '{% Block %} avec contenu {% end %}',
+			'twig.statement': '{% Tag %}',
+			'twig.statement-with-content': '{% Tag %} avec contenu {% endTag %}',
 			'twig.comment': '{# Commentaire #}',
-			'twig.expression': '{{ Expression }}'
+			'twig.expression': '{{ Variable }}'
 		} );
 
 		editor.ui.componentFactory.add( 'twigCommands', locale => {

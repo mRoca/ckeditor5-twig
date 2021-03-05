@@ -1,0 +1,24 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Dto/'
+            - '../src/Entity/'
+            - '../src/Extractor/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    HelloNico\Twig\DumpExtension:
+        tags:
+            - { name: twig.extension }

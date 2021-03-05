@@ -1,0 +1,69 @@
+{
+    "name": "mroca/ckeditor5-twig-symfony-demo",
+    "description": "CKeditor5 Twig plugin symfony demo project",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.2.5",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "symfony/cache": "5.2.*",
+        "symfony/console": "5.2.*",
+        "symfony/dotenv": "5.2.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "5.2.*",
+        "symfony/property-info": "5.2.*",
+        "symfony/stopwatch": "5.2.*",
+        "symfony/twig-bundle": "5.2.*",
+        "symfony/yaml": "5.2.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
+    },
+    "require-dev": {
+        "hellonico/twig-dump-extension": "^1.1",
+        "symfony/var-dumper": "5.2.*",
+        "symfony/web-profiler-bundle": "5.2.*",
+        "symfony/webpack-encore-bundle": "^1.11"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.2.*"
+        }
+    }
+}

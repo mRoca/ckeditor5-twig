@@ -52,3 +52,16 @@ Then open the `index.html` file.
 ```bash
 yarn lint-fix
 ```
+
+### Demo symfony project
+
+Install the [Symfony CLI](https://symfony.com/download), then:
+```bash
+cd demo/symfonyapp
+composer install
+yarn install
+(yarn encore dev-server --port 8880 & symfony server:start --port 8000 --no-tls)
+# or run the two commands in a different terminal
+```
+
+Then access the [demo page](http://127.0.0.1:8000)

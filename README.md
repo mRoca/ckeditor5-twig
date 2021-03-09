@@ -6,6 +6,9 @@ Demo: [mroca.github.io/ckeditor5-twig](https://mroca.github.io/ckeditor5-twig/)
 
 ## Usage
 
+You must use the same major CKEditor version as the one supported by this plugin (see the `package.json` file).
+If you get a `ckeditor-duplicated-modules` error, you have mismatching versions.
+
 ```bash
 yarn add ckeditor5-twig
 ```
@@ -47,7 +50,7 @@ Translations are currently available for `EN` and `FR` locales (see the `twig/tw
 
 ### Symfony integration
 
-A PHP `TwigVariablesExtractor` class allows to 
+A PHP `TwigVariablesExtractor` class allows to
 
 This class is currently located into `demo/symfonyapp/src/Extractor`, and will later be in a dedicated repository.
 
@@ -56,9 +59,6 @@ This class is currently located into `demo/symfonyapp/src/Extractor`, and will l
 
 namespace App\Controller;
 
-use App\Dto\BlogArticle;
-use App\Dto\Comment;
-use App\Dto\User;
 use App\Extractor\TwigVariablesExtractor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

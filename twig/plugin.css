@@ -7,7 +7,7 @@
 }
 
 .twig-statement {
-    background: #dcb470 !important;
+    background: #9dbfff !important;
 }
 
 .twig-statement, .twig-statement-content {
@@ -57,13 +57,13 @@ table.twig-variables th, table.twig-variables td {
     padding: 4px 10px;
     text-align: left;
 }
-table.twig-variables thead th {
-    font-size: 1em;
-    text-transform: uppercase
-}
 table.twig-variables th {
     font-weight: bold;
     letter-spacing: 1px;
+}
+table.twig-variables thead th {
+    font-size: 1em;
+    text-transform: uppercase
 }
 
 .twig-variables-example pre {

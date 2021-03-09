@@ -3,11 +3,10 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { add } from '@ckeditor/ckeditor5-utils/src/translation-service';
 import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import ListView from '@ckeditor/ckeditor5-ui/src/list/listview';
-import DisplayTwigVariablesUI from './plugins/variablesdisplayui';
 
 export default class TwigPluginUI extends Plugin {
 	static get requires() {
-		return [ DisplayTwigVariablesUI ];
+		return [ ];
 	}
 
 	init() {
@@ -20,7 +19,18 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement': '{% Tag %}',
 			'twig.statement-with-content': '{% Tag %} with content {% endTag %}',
 			'twig.comment': '{# Comment #}',
-			'twig.expression': '{{ Variable }}'
+			'twig.expression': '{{ Variable }}',
+			'twig.variables.name': 'Name',
+			'twig.variables.type': 'Type',
+			'twig.variables.label': 'Description',
+			'twig.variables.type.object': 'Object',
+			'twig.variables.type.array': 'Array',
+			'twig.variables.type.string': 'String',
+			'twig.variables.type.boolean': 'Boolean',
+			'twig.variables.type.integer': 'Integer',
+			'twig.variables.type.float': 'Float',
+			'twig.variables.type.datetime': 'Datetime',
+			'twig.variables.type.unknown': 'Unknown'
 		} );
 
 		add( 'fr', {
@@ -29,7 +39,18 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement': '{% Tag %}',
 			'twig.statement-with-content': '{% Tag %} avec contenu {% endTag %}',
 			'twig.comment': '{# Commentaire #}',
-			'twig.expression': '{{ Variable }}'
+			'twig.expression': '{{ Variable }}',
+			'twig.variables.name': 'Nom',
+			'twig.variables.type': 'Type',
+			'twig.variables.label': 'Description',
+			'twig.variables.type.object': 'Objet',
+			'twig.variables.type.array': 'Tableau',
+			'twig.variables.type.string': 'Chaîne',
+			'twig.variables.type.boolean': 'Booléen',
+			'twig.variables.type.integer': 'Nombre entier',
+			'twig.variables.type.float': 'Nombre à virgule',
+			'twig.variables.type.datetime': 'Date et heure',
+			'twig.variables.type.unknown': 'Inconnu'
 		} );
 
 		editor.ui.componentFactory.add( 'twigCommands', locale => {

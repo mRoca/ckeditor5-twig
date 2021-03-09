@@ -6,8 +6,6 @@ use App\Dto\BlogArticle;
 use App\Dto\Comment;
 use App\Dto\User;
 use App\Extractor\TwigVariablesExtractor;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,8 +38,8 @@ class DefaultController extends AbstractController
             ],
             'calendar' => [                                 // associative array as object
                 'now' => 'datetime',                        // type name
-                'yesterday' => DateTimeInterface::class,   // interface name
-                'tomorrow' => new DateTimeImmutable(),      // object
+                'yesterday' => \DateTimeInterface::class,   // interface name
+                'tomorrow' => new \DateTimeImmutable(),     // object
             ],
         ]);
 

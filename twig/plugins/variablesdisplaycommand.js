@@ -1,6 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
-import { variablesTypes } from './variablesdisplayui';
+
+export const variablesTypes = [ 'object', 'array', 'string', 'boolean', 'bool', 'integer', 'int', 'float', 'datetime', 'unknown' ];
 
 export class DisplayTwigVariablesCommand extends Command {
 	execute() {
@@ -18,13 +19,7 @@ export class DisplayTwigVariablesCommand extends Command {
 	}
 
 	refresh() {
-		// console.log(this._createVariablesHtmlOutput(this.editor.config.get('twig.variables')))
 		this.isEnabled = true;
-		// const model = this.editor.model;
-		// const selection = model.document.selection;
-		// const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigExpression' );
-		//
-		// this.isEnabled = allowedIn !== null;
 	}
 
 	_createVariablesHtmlOutput( vars ) {
@@ -125,6 +120,11 @@ export class DisplayTwigVariablesCommand extends Command {
 		// Custom type
 		if ( cleanType === 'unknown' && conf.type && conf.type !== 'unknown' ) {
 			typeLabel += ` (${ conf.type })`;
+		}
+
+		// Nullable
+		if ( conf.nullable ) {
+			typeLabel += ' | null';
 		}
 
 		return typeLabel;

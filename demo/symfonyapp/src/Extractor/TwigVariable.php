@@ -2,13 +2,10 @@
 
 namespace App\Extractor;
 
-use InvalidArgumentException;
-use JsonSerializable;
-
 /**
  * TwigVariable is a representation of a CKEditor Twig plugin variable.
  */
-class TwigVariable implements JsonSerializable
+class TwigVariable implements \JsonSerializable
 {
     public const TYPE_OBJECT = 'object';
     public const TYPE_ARRAY = 'array';
@@ -63,7 +60,7 @@ class TwigVariable implements JsonSerializable
         }
 
         if (!in_array($type, self::$TYPES, true)) {
-            throw new InvalidArgumentException("Invalid twig variable type: $type");
+            throw new \InvalidArgumentException("Invalid twig variable type: $type");
         }
 
         $this->type = $type;
@@ -88,5 +85,25 @@ class TwigVariable implements JsonSerializable
             'children' => $this->children,
             'properties' => $this->properties,
         ], static fn($value) => null !== $value && !(is_array($value) && empty($value)));
+    }
+
+    public static function create(array $data): self
+    {
+        if (!empty($data['properties'])) {
+            foreach ($data['properties'] as $key => $propertyType) {
+                $data['properties'][$key] = self::create($data['properties'][$key]);
+            }
+        }
+
+        if (is_array($data['children'] ?? null)) {
+            $data['children'] = self::create($data['children']);
+        }
+
+        return new self(
+            $data['type'] ?? self::TYPE_UNKNOWN,
+            $data['label'] ?? null,
+            $data['nullable'] ?? false,
+            $data['properties'] ?? $data['children'] ?? null,
+        );
     }
 }

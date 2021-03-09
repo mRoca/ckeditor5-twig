@@ -2,8 +2,6 @@
 
 namespace App\Extractor;
 
-use DateTimeInterface;
-use InvalidArgumentException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
@@ -73,14 +71,10 @@ class TwigVariablesExtractor
             return $this->extractItemInfos($items)->properties;
         }
 
-        throw new InvalidArgumentException('You must pass an array or an object to the extract function');
+        throw new \InvalidArgumentException('You must pass an array or an object to the extract function');
     }
 
-    /**
-     * @param $item
-     * @return TwigVariable|array
-     */
-    protected function extractItemInfos($item)
+    protected function extractItemInfos($item): TwigVariable
     {
         // Type per name
         if (is_string($item) && in_array($item, TwigVariable::$TYPES, true)) {
@@ -104,7 +98,7 @@ class TwigVariablesExtractor
 
         // Array with variable config
         if (is_array($item) && in_array($item['type'] ?? null, TwigVariable::$TYPES, true)) {
-            return $item;
+            return TwigVariable::create($item);
         }
 
         // Array with 1 item as content type
@@ -133,7 +127,7 @@ class TwigVariablesExtractor
         }
 
         // Datetime
-        if (is_subclass_of($className, DateTimeInterface::class)) {
+        if (is_subclass_of($className, \DateTimeInterface::class)) {
             return new TwigVariable(TwigVariable::TYPE_DATETIME);
         }
 
@@ -204,7 +198,7 @@ class TwigVariablesExtractor
             }
 
             // Datetime
-            if (is_subclass_of($objectClass, DateTimeInterface::class)) {
+            if (is_subclass_of($objectClass, \DateTimeInterface::class)) {
                 return new TwigVariable(TwigVariable::TYPE_DATETIME, null, $nullable);
             }
 

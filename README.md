@@ -114,6 +114,11 @@ class DefaultController extends AbstractController
 }
 ```
 
+### Override translations
+
+All translations are defined in the `twig/twigpluginui.js` file. Each one can be overridden by
+[adding the translation](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/ui/localization.html#using-the-windowckeditor_translations-object)
+
 ## Development
 
 ### CKEditor plugin
@@ -154,30 +159,30 @@ vendor/bin/php-cs-fixer fix
 
 ## Known issues
 
-- As the twig tags are replaced by a div, they cannot be used into a, "ul" list without breaking the html:
-    ```html
+- As the twig tags are replaced by a `div`, they cannot be used into `a`, `ul` list without breaking the html:
+    ```twig
     <ul>
         {% for a in b %}
             <li>{{ a }}</li>
         {% endfor %}
     </ul>
 
-	<ul>
-		{# This comment should be replaced by a "li" tag, as it is located into an "ul" tag #}
-		<li>This is a list item</li>
-	</ul>
+    <ul>
+        {# This comment should be replaced by a "li" tag, as it is located into an "ul" tag #}
+        <li>This is a list item</li>
+    </ul>
     ```
 - Inline blocks are not handled for now:
-	```html
-	<p>{% if a %}yes{% else %}no{% endif %}</p>
-	```
+    ```twig
+    <p>{% if a %}yes{% else %}no{% endif %}</p>
+    ```
 - The block statement content part must have a parent Paragraph in order to be writable.
   A Paragraph is currently added into each block content
--  "else" is not well-supported for now as part of the graphical if / for block
+-  `else` is not well-supported for now as part of the graphical `if` / `for` block
 
 ## TODO
 
-- Deal with inline & li statements
+- Deal with inline & `li` statements
 - Allow passing available functions & filters into the variables list
 - Validate the twig template with [twig.js](https://github.com/twigjs/twig.js)
 - Add the [auto reload plugin](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/saving-data.html)

@@ -1,8 +1,8 @@
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { add } from '@ckeditor/ckeditor5-utils/src/translation-service';
 import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import ListView from '@ckeditor/ckeditor5-ui/src/list/listview';
+import { addTranslationsIfNotExist } from './utils';
 
 export default class TwigPluginUI extends Plugin {
 	static get requires() {
@@ -13,13 +13,13 @@ export default class TwigPluginUI extends Plugin {
 		const editor = this.editor;
 		const t = editor.t;
 
-		add( 'en', {
+		addTranslationsIfNotExist( 'en', {
 			'twig.commands': 'Twig commands',
 			'twig.variables': 'Variables',
-			'twig.statement': '{% Tag %}',
-			'twig.statement-with-content': '{% Tag %} with content {% endTag %}',
-			'twig.comment': '{# Comment #}',
-			'twig.expression': '{{ Variable }}',
+			'twig.statement': 'Tag',
+			'twig.statement-with-content': 'Tag with content',
+			'twig.comment': 'Comment',
+			'twig.expression': 'Variable',
 			'twig.variables.empty': 'There is no available variables for this template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',
@@ -34,13 +34,13 @@ export default class TwigPluginUI extends Plugin {
 			'twig.variables.type.unknown': 'Unknown'
 		} );
 
-		add( 'fr', {
+		addTranslationsIfNotExist( 'fr', {
 			'twig.commands': 'Commandes Twig',
 			'twig.variables': 'Variables',
-			'twig.statement': '{% Tag %}',
-			'twig.statement-with-content': '{% Tag %} avec contenu {% endTag %}',
-			'twig.comment': '{# Commentaire #}',
-			'twig.expression': '{{ Variable }}',
+			'twig.statement': 'Instruction',
+			'twig.statement-with-content': 'Boucle / Condition / Bloc',
+			'twig.comment': 'Commentaire',
+			'twig.expression': 'Variable',
 			'twig.variables.empty': 'Aucune variable n\'est disponible pour ce template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',

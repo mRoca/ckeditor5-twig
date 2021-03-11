@@ -163,7 +163,7 @@ class TwigVariablesExtractor
     protected function propertyInfoTypeToTwigVariable(?array $infoTypes, array $context = []): TwigVariable
     {
         // The extractor can find 0, 1 or more types. E.G.: array|Foobar[]
-        if (empty(array_filter($infoTypes))) {
+        if (empty(array_filter($infoTypes ?: []))) {
             return new TwigVariable(TwigVariable::TYPE_UNKNOWN);
         }
 

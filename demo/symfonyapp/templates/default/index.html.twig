@@ -1,10 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>CKeditor5 twig Symfony plugin demo</h1>
+	<h1>CKeditor5 twig Symfony plugin demo</h1>
 
-    <h3>Config</h3>
-    {% dump({ phpConfig: variables, jsonConfig: [ variables|json_encode(constant('JSON_PRETTY_PRINT')) ] }) %}
+	<h3>Config</h3>
 
-    <p data-controller="editor"></p>
+	<style>
+		.sf-dump {
+			z-index: auto !important;
+		}
+	</style>
+
+	{% dump({ phpConfig: variables, jsonConfig: [ variables|json_encode(constant('JSON_PRETTY_PRINT')) ] }) %}
+
+	<div data-controller="editor" data-editor-variables-value="{{ variables|json_encode|e('html_attr') }}">
+		{%- verbatim -%}
+		{# This is a default template. #}
+
+		{% macro sayHello(name) %}
+			Hello {{name}}
+		{% endmacro %}
+
+		<h1>{{ sayHello(user.firstname) }}</h1>
+
+		<p>This is a CKEditor Twig template plugin demo.</p>
+	{%- endverbatim -%}
+	</div>
 {% endblock %}

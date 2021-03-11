@@ -17,12 +17,10 @@ module.exports = {
 		rules: [
 			{
 				test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-
 				use: [ 'raw-loader' ]
 			},
 			{
 				test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-
 				use: [
 					{
 						loader: 'style-loader',

@@ -10,19 +10,18 @@ class User
     private \DateTime $birthdate;
 
     /**
-     *
-     * @var PostalAddress|null The user postal address, if we know it.
+     * @var PostalAddress|null the user postal address, if we know it
      */
     private ?PostalAddress $address = null;
 
     /**
      * Is the user enabled?
-     * @var bool
      */
     private bool $isEnabled = true;
 
     /**
      * The user's favorites numbers as an array of float. Why not!
+     *
      * @var array|float[]
      */
     private array $favoriteNumbers = [];

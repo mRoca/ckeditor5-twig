@@ -33,21 +33,19 @@ class TwigVariable implements \JsonSerializable
 
     /**
      * Children object must only be set when type === "array".
-     * @var TwigVariable|null
      */
     public ?TwigVariable $children = null;
 
     /**
      * Properties associative array must only be set when type === "object".
+     *
      * @var TwigVariable[]
      */
     public array $properties = [];
 
     /**
      * TwigVariable constructor.
-     * @param string $type
-     * @param string|null $label
-     * @param bool $nullable
+     *
      * @param TwigVariable|TwigVariable[] $childrenOrProperties
      */
     public function __construct(string $type, ?string $label = null, bool $nullable = false, $childrenOrProperties = null)
@@ -84,7 +82,7 @@ class TwigVariable implements \JsonSerializable
             'nullable' => $this->nullable,
             'children' => $this->children,
             'properties' => $this->properties,
-        ], static fn($value) => null !== $value && !(is_array($value) && empty($value)));
+        ], static fn ($value) => null !== $value && !(is_array($value) && empty($value)));
     }
 
     public static function create(array $data): self

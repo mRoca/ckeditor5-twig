@@ -1,18 +1,28 @@
 {
-    "devDependencies": {
-        "@symfony/stimulus-bridge": "^2.0.0",
-        "@symfony/webpack-encore": "^1.0.0",
-        "core-js": "^3.0.0",
-        "regenerator-runtime": "^0.13.2",
-        "stimulus": "^2.0.0",
-        "webpack-notifier": "^1.6.0"
-    },
-    "license": "UNLICENSED",
-    "private": true,
-    "scripts": {
-        "dev-server": "encore dev-server",
-        "dev": "encore dev",
-        "watch": "encore dev --watch",
-        "build": "encore production --progress"
-    }
+	"name": "ckeditor5-twig-demo",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"dev-server": "encore dev-server",
+		"dev": "encore dev",
+		"watch": "encore dev --watch",
+		"build": "encore production --progress"
+	},
+	"dependencies": {
+		"@ckeditor/ckeditor5-basic-styles": "^26.0.0",
+		"@ckeditor/ckeditor5-build-classic": "^26.0.0",
+		"@ckeditor/ckeditor5-dev-webpack-plugin": "^24.4.0",
+		"@ckeditor/ckeditor5-essentials": "^26.0.0",
+		"@ckeditor/ckeditor5-heading": "^26.0.0",
+		"@ckeditor/ckeditor5-paragraph": "^26.0.0",
+		"ckeditor5-twig-plugin": "^0.0.2"
+	},
+	"devDependencies": {
+		"@symfony/stimulus-bridge": "^2.0.0",
+		"@symfony/webpack-encore": "^1.0.0",
+		"core-js": "^3.0.0",
+		"regenerator-runtime": "^0.13.2",
+		"stimulus": "^2.0.0",
+		"webpack-notifier": "^1.6.0"
+	}
 }

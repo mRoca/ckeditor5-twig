@@ -1,6 +1,6 @@
 name: Lint
 
-on: push
+on: [push, pull_request]
 
 jobs:
   javascript:
@@ -12,3 +12,17 @@ jobs:
 
       - run: yarn lint
       - run: yarn stylelint
+
+  symfony:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: demo/symfonyapp
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
+        with:
+          working_dir: demo/symfonyapp
+      - run: vendor/bin/php-cs-fixer fix --dry-run --verbose --diff
+      - run: bin/console --env=test lint:twig templates
+      - run: bin/console --env=test lint:yaml config

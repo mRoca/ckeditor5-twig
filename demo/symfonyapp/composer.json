@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.2.5",
+        "php": ">=7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -23,6 +23,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.18",
         "hellonico/twig-dump-extension": "^1.1",
         "symfony/var-dumper": "5.2.*",
         "symfony/web-profiler-bundle": "5.2.*",

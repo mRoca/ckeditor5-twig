@@ -4,6 +4,14 @@ This CKEditor5 plugin allows editing [Twig](https://twig.symfony.com/) templates
 
 Demo: [mroca.github.io/ckeditor5-twig](https://mroca.github.io/ckeditor5-twig/)
 
+Features:
+
+- Display all available variables, their type & children.
+- `{{ variable|filter }}`
+- `{% tag %}` blocks
+- `{% tag %} with content {% endtag %}` blocks
+- `{# comments #}`
+
 ## Usage
 
 You must use the same major CKEditor version as the one supported by this plugin (see the `package.json` file).
@@ -50,9 +58,11 @@ Translations are currently available for `EN` and `FR` locales (see the `twig/tw
 
 ### Symfony integration
 
-A PHP `TwigVariablesExtractor` class allows to
+A PHP `TwigVariablesExtractor` class allows to convert an array of items (objects, entities, arrays, types, ...)
+into a `variables` array that can be used as plugin config.
 
-This class is currently located into `demo/symfonyapp/src/Extractor`, and will later be in a dedicated repository.
+This class is currently located into `demo/symfonyapp/src/Extractor`, and will later be moved into a dedicated repository
+and composer package.
 
 ```php
 <?php
@@ -74,8 +84,7 @@ class DefaultController extends AbstractController
         // $variables = $extractor->extract(MyTemplateVariablesObject::class);
 
         // Option 3: TwigVariablesExtractor & variables defined in an array
-        $extractor = new TwigVariablesExtractor();
-        $variables = $extractor->extract([
+        $variables = [
             'app' => [                                      // Manually defined config
                 'type' => 'object',
                 'label' => 'All app related global variables',
@@ -95,10 +104,11 @@ class DefaultController extends AbstractController
                 'yesterday' => \DateTimeInterface::class,   // interface name
                 'tomorrow' => new \DateTimeImmutable(),     // object
             ],
-        ]);
+        ];
 
+        $extractor = new TwigVariablesExtractor();
         return $this->render('default/index.html.twig', [
-            'variables' => $variables,
+            'variables' => $extractor->extract($variables),
         ]);
     }
 }

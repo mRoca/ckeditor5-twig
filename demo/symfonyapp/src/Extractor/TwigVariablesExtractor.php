@@ -25,11 +25,11 @@ class TwigVariablesExtractor
         $this->propertyInfoExtractor = $propertyInfoExtractor ?: self::createPropertyInfoExtractor();
 
         if (array_key_exists('circular_reference_limit', $options)) {
-            $this->circularReferenceLimit = (int)$options['circular_reference_limit'];
+            $this->circularReferenceLimit = (int) $options['circular_reference_limit'];
         }
 
         if (array_key_exists('max_depth', $options)) {
-            $this->maxDepth = (int)$options['max_depth'];
+            $this->maxDepth = (int) $options['max_depth'];
         }
     }
 
@@ -55,6 +55,7 @@ class TwigVariablesExtractor
 
     /**
      * @param array|object $items
+     *
      * @return TwigVariable[]
      */
     public function extract($items): array
@@ -158,8 +159,6 @@ class TwigVariablesExtractor
 
     /**
      * @param Type[]|null $infoTypes
-     * @param array $context
-     * @return TwigVariable
      */
     protected function propertyInfoTypeToTwigVariable(?array $infoTypes, array $context = []): TwigVariable
     {
@@ -169,21 +168,21 @@ class TwigVariablesExtractor
         }
 
         // If all detected types are nullable, it's nullable
-        $nullable = (bool)array_reduce($infoTypes, static fn(bool $carry, Type $cur) => $carry && $cur->isNullable(), true);
+        $nullable = (bool) array_reduce($infoTypes, static fn (bool $carry, Type $cur) => $carry && $cur->isNullable(), true);
 
         // Array
-        $isCollection = (bool)array_reduce($infoTypes, static fn(bool $carry, Type $cur) => $carry && $cur->isCollection(), true);
+        $isCollection = (bool) array_reduce($infoTypes, static fn (bool $carry, Type $cur) => $carry && $cur->isCollection(), true);
         if ($isCollection) {
             // We ignore the collection key type for now, maybe later ?
             /** @var Type|null $valueType The first not null collection items type */
-            $valueType = array_reduce($infoTypes, static fn(?Type $carry, Type $cur) => $carry ?: $cur->getCollectionValueType());
+            $valueType = array_reduce($infoTypes, static fn (?Type $carry, Type $cur) => $carry ?: $cur->getCollectionValueType());
 
             return new TwigVariable(TwigVariable::TYPE_ARRAY, null, $nullable, $this->propertyInfoTypeToTwigVariable([$valueType], $context));
         }
 
         // Scalar
         // If all the types have the same type, we use it (array|Foobar[]). Else, it's an unknown type (array|object).
-        $type = array_reduce($infoTypes, static fn(?string $carry, Type $cur) => $carry === null || $carry === $cur->getBuiltinType() ? $cur->getBuiltinType() : TwigVariable::TYPE_UNKNOWN);
+        $type = array_reduce($infoTypes, static fn (?string $carry, Type $cur) => null === $carry || $carry === $cur->getBuiltinType() ? $cur->getBuiltinType() : TwigVariable::TYPE_UNKNOWN);
         if (in_array($type, [TwigVariable::TYPE_UNKNOWN, Type::BUILTIN_TYPE_BOOL, Type::BUILTIN_TYPE_FLOAT, Type::BUILTIN_TYPE_INT, Type::BUILTIN_TYPE_STRING], true)) {
             return new TwigVariable($type, null, $nullable);
         }
@@ -191,7 +190,7 @@ class TwigVariablesExtractor
         // Object
         if (Type::BUILTIN_TYPE_OBJECT === $type) {
             /** @var string|null $objectClass The first not null found object class */
-            $objectClass = array_reduce($infoTypes, static fn(?string $carry, Type $cur) => $carry ?: $cur->getClassName());
+            $objectClass = array_reduce($infoTypes, static fn (?string $carry, Type $cur) => $carry ?: $cur->getClassName());
 
             if (null === $objectClass) {
                 return new TwigVariable(TwigVariable::TYPE_OBJECT, null, $nullable);

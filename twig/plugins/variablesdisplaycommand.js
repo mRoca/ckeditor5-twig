@@ -75,6 +75,10 @@ export class DisplayTwigVariablesCommand extends Command {
 
 		const createChildrenTr = objConf => {
 			const childrenTr = document.createElement( 'tr' );
+			if ( !objConf.properties || !Object.keys( objConf.properties ).length ) {
+				return childrenTr;
+			}
+
 			childrenTr.append( textElement( 'td', '' ) );
 			const childrenTd = document.createElement( 'td' );
 			childrenTd.colSpan = 2;

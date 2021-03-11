@@ -28,13 +28,13 @@ class DefaultController extends AbstractController
                 'properties' => [
                     'debug' => ['type' => 'boolean', 'label' => 'Is debug enabled?'],
                     'environment' => ['type' => 'string', 'label' => 'Current app env: dev or prod'],
-                ]
+                ],
             ],
             'siteTitle' => 'string',                        // type as string
             'user' => User::class,                          // object & children
             'article' => BlogArticle::class,                // class name
             'comments' => [                                 // array with ONE item type
-                Comment::class                              // array content type
+                Comment::class,                              // array content type
             ],
             'calendar' => [                                 // associative array as object
                 'now' => 'datetime',                        // type name

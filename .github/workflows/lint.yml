@@ -20,9 +20,10 @@ jobs:
         working-directory: demo/symfonyapp
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
+      - uses: shivammathur/setup-php@v2
         with:
-          working_dir: demo/symfonyapp
+          php-version: '7.4'
+      - run: composer install
       - run: vendor/bin/php-cs-fixer fix --dry-run --verbose --diff
       - run: bin/console --env=test lint:twig templates
       - run: bin/console --env=test lint:yaml config

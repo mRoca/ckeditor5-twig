@@ -2,11 +2,15 @@
 
 namespace App\Extractor;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\Extractor\SerializerExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 
 /**
  * TwigVariablesExtractor allows to transform a PHP value into a list of CKEditor Twig plugin variables.
@@ -33,12 +37,38 @@ class TwigVariablesExtractor
         }
     }
 
+    /**
+     * @param array|object $items
+     * @param array        $context ['serializer_groups' => ['foo']]
+     *
+     * @return TwigVariable[]
+     */
+    public function extract($items, array $context = []): array
+    {
+        if (is_array($items)) {
+            foreach ($items as $key => $type) {
+                $items[$key] = $this->extractItemInfos($type, $context);
+            }
+
+            return $items;
+        }
+
+        if (is_object($items)) {
+            return $this->extractItemInfos($items, $context)->properties;
+        }
+
+        throw new \InvalidArgumentException('You must pass an array or an object to the extract function');
+    }
+
     protected static function createPropertyInfoExtractor(): PropertyInfoExtractorInterface
     {
+        $serializerClassMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializerExtractor = new SerializerExtractor($serializerClassMetadataFactory);
+
         $phpDocExtractor = new PhpDocExtractor();
         $reflectionExtractor = new ReflectionExtractor();
 
-        $listExtractors = [$reflectionExtractor];
+        $listExtractors = [$serializerExtractor, $reflectionExtractor];
         $typeExtractors = [$phpDocExtractor, $reflectionExtractor];
         $descriptionExtractors = [$phpDocExtractor];
         $carryccessExtractors = [$reflectionExtractor];
@@ -53,29 +83,7 @@ class TwigVariablesExtractor
         );
     }
 
-    /**
-     * @param array|object $items
-     *
-     * @return TwigVariable[]
-     */
-    public function extract($items): array
-    {
-        if (is_array($items)) {
-            foreach ($items as $key => $type) {
-                $items[$key] = $this->extractItemInfos($type);
-            }
-
-            return $items;
-        }
-
-        if (is_object($items)) {
-            return $this->extractItemInfos($items)->properties;
-        }
-
-        throw new \InvalidArgumentException('You must pass an array or an object to the extract function');
-    }
-
-    protected function extractItemInfos($item): TwigVariable
+    protected function extractItemInfos($item, array $context = []): TwigVariable
     {
         // Type per name
         if (is_string($item) && in_array($item, TwigVariable::$TYPES, true)) {
@@ -84,12 +92,12 @@ class TwigVariablesExtractor
 
         // Object by class name
         if (is_string($item) && class_exists($item)) {
-            return $this->extractObjectInfos($item);
+            return $this->extractObjectInfos($item, $context);
         }
 
         // Object
         if (is_object($item)) {
-            return $this->extractObjectInfos(get_class($item));
+            return $this->extractObjectInfos(get_class($item), $context);
         }
 
         // Scalar
@@ -104,7 +112,7 @@ class TwigVariablesExtractor
 
         // Array with 1 item as content type
         if (is_array($item) && 1 === count($item) && 0 === array_key_first($item)) {
-            return new TwigVariable(TwigVariable::TYPE_ARRAY, null, false, $this->extractItemInfos($item[0]));
+            return new TwigVariable(TwigVariable::TYPE_ARRAY, null, false, $this->extractItemInfos($item[0], $context));
         }
 
         // Associative array as object
@@ -112,7 +120,7 @@ class TwigVariablesExtractor
             /** @var TwigVariable[] $properties */
             $properties = [];
             foreach ($item as $key => $propertyType) {
-                $properties[$key] = $this->extractItemInfos($propertyType);
+                $properties[$key] = $this->extractItemInfos($propertyType, $context);
             }
 
             return new TwigVariable(TwigVariable::TYPE_OBJECT, null, false, $properties);
@@ -137,7 +145,7 @@ class TwigVariablesExtractor
         }
 
         $context['parents'][] = $className;
-        $properties = array_flip($this->propertyInfoExtractor->getProperties($className));
+        $properties = array_flip($this->propertyInfoExtractor->getProperties($className, $context) ?: []);
         foreach ($properties as $key => $nothing) {
             $properties[$key] = $this->propertyInfoTypeToTwigVariable($this->propertyInfoExtractor->getTypes($className, $key), $context);
         }

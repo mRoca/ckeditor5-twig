@@ -64,6 +64,28 @@ into a `variables` array that can be used as plugin config.
 This class is currently located into `demo/symfonyapp/src/Extractor`, and will later be moved into a dedicated repository
 and composer package.
 
+**Extractor options**
+
+```php
+$propertyInfoExtractor = new PropertyInfoExtractor('...');
+$extractor = new TwigVariablesExtractor($propertyInfoExtractor, [
+	'circular_reference_limit' => 1,
+	'max_depth' => 4,
+]);
+```
+
+**Groups & Serializer**
+
+If there are too many object properties to parse, you can use the `@Groups` serializer annotation, then use the
+[serializer_groups context option](https://symfony.com/doc/current/components/property_info.html#serializerextractor)
+
+```php
+$extractor = new TwigVariablesExtractor();
+$variables = $extractor->extract($types, ['serializer_groups' => ['foo']]);
+```
+
+**Variables types**
+
 ```php
 <?php
 

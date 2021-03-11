@@ -116,6 +116,8 @@ class DefaultController extends AbstractController
 
 ## Development
 
+### CKEditor plugin
+
 ```bash
 yarn install
 yarn watch
@@ -123,10 +125,11 @@ yarn watch
 
 Then open the `index.html` file (with the `Run` button in PhpStorm / WebStorm, for instance).
 
-### Before pushing
+**Before pushing**
 
 ```bash
 yarn lint:fix
+yarn stylelint:fix
 ```
 
 ### Demo symfony project
@@ -141,3 +144,10 @@ yarn install
 ```
 
 Then access the [demo page](http://127.0.0.1:8000)
+
+**Before pushing**
+
+```bash
+cd demo/symfonyapp
+vendor/bin/php-cs-fixer fix
+```

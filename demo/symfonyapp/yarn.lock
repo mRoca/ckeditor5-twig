@@ -2019,10 +2019,10 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-ckeditor5-twig-plugin@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/ckeditor5-twig-plugin/-/ckeditor5-twig-plugin-0.0.2.tgz#64aca984ffcd8416ebe8d86852a72be409824a87"
-  integrity sha512-R6RFWsojrF+PnwBfIt7o2Zv+SpgL7VkF6GCZpmQKnJps7/9/Ctm8W0xUeXgN/ubDUbwl5C88DTjo+L2g3dWWqA==
+ckeditor5-twig@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ckeditor5-twig/-/ckeditor5-twig-0.0.3.tgz#8cc4f7efbaed203b616e8a17978d0fafa8a2fe3a"
+  integrity sha512-kH+Ue3byCAFeEGPw61YyuD1408Z2FaJn2n+6UHPghogWnAGRpmBx/GTjaXe7XqCe7RDB5srgJThMMcS0x5o0eA==
   dependencies:
     "@ckeditor/ckeditor5-core" "^26.0.0"
     "@ckeditor/ckeditor5-engine" "^26.0.0"

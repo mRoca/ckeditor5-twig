@@ -15,7 +15,7 @@
 		"@ckeditor/ckeditor5-essentials": "^26.0.0",
 		"@ckeditor/ckeditor5-heading": "^26.0.0",
 		"@ckeditor/ckeditor5-paragraph": "^26.0.0",
-		"ckeditor5-twig-plugin": "^0.0.2"
+		"ckeditor5-twig": "^0.0.3"
 	},
 	"devDependencies": {
 		"@symfony/stimulus-bridge": "^2.0.0",

@@ -9,8 +9,8 @@ import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
 import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 
 /* twig plugin */
-import TwigPlugin from 'ckeditor5-twig-plugin/twig/twigplugin';
-import 'ckeditor5-twig-plugin/twig/plugin.css';
+import TwigPlugin from 'ckeditor5-twig/twig/twigplugin';
+import 'ckeditor5-twig/twig/plugin.css';
 
 export default class extends Controller {
 	static values = {
@@ -18,7 +18,6 @@ export default class extends Controller {
 	}
 
 	connect() {
-		console.log(this.variablesValue)
 		ClassicEditor
 			.create( this.element, {
 				plugins: [ Essentials, Paragraph, Heading, Bold, Italic, TwigPlugin ],

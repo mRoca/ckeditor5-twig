@@ -57,6 +57,6 @@
     "lint": "eslint --quiet --max-warnings=0 'twig/**/*.js' '*.js'",
     "lint:fix": "eslint --fix --max-warnings=0 'twig/**/*.js' '*.js'",
     "stylelint": "stylelint --quiet --allow-empty-input 'twig/**/*.css' '*.css'",
-    "stylelint:fix": "stylelint --dix --allow-empty-input 'twig/**/*.css' '*.css'"
+    "stylelint:fix": "stylelint --fix --allow-empty-input 'twig/**/*.css' '*.css'"
   }
 }

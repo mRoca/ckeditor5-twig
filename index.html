@@ -43,52 +43,6 @@
                 <p>Are you from {{ country.name }}?</p>
             {% endfor %}
         </div>
-
-        <h3>Known issues</h3>
-
-        <ul>
-            <li>
-                As the twig tags are replaced by a div, they cannot be used into a "ul" list without breaking the html:
-                <br>
-                <ul>
-                    {% for a in b %}
-                        <li>{{ a }}</li>
-                    {% endfor %}
-                </ul>
-                <ul>
-                    {# This comment should be replaced by a "li" tag, as it is located into an "ul" tag #}
-                    <li>This is a list item</li>
-                </ul>
-            </li>
-            <li>
-                Inline blocks are not handled for now: <br>
-                {% if a %}yes{% else %}no{% endif %}
-            </li>
-            <li>
-                The block statement content part must have a parent Paragraph in order to be writable.
-                A Paragraph is currently added into each block content
-            </li>
-            <li>
-                "else" is not well supported for now
-            </li>
-        </ul>
-
-        <h3>TODO</h3>
-        <ul>
-            <li>Deal with inline & li statements</li>
-            <li>Allow to pass a list of typed variables</li>
-            <li>Use <a href="https://github.com/twigjs/twig.js">twig.js</a> for html & vars parsing & rendering</li>
-            <li>Add <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/saving-data.html">the
-                auto reload plugin</a> to the demo
-            </li>
-            <li>
-                Variables plugin:
-                <ul>
-                    <li>Add nullable types</li>
-                    <li>Allow examples overrides</li>
-                </ul>
-            </li>
-        </ul>
     </div>
 </div>
 

@@ -25,8 +25,10 @@ export class DisplayTwigVariablesCommand extends Command {
 	_createVariablesHtmlOutput( vars ) {
 		const t = this.editor.t;
 
-		if ( typeof vars !== 'object' || vars === null ) {
-			return;
+		if ( typeof vars !== 'object' || vars === null || Object.keys( vars ).length === 0 ) {
+			const nothingEl = document.createElement( 'h3' );
+			nothingEl.innerText = t( 'twig.variables.empty' );
+			return nothingEl;
 		}
 
 		const tableEl = document.createElement( 'table' );

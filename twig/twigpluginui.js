@@ -20,6 +20,7 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement-with-content': '{% Tag %} with content {% endTag %}',
 			'twig.comment': '{# Comment #}',
 			'twig.expression': '{{ Variable }}',
+			'twig.variables.empty': 'There is no available variables for this template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',
 			'twig.variables.label': 'Description',
@@ -40,6 +41,7 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement-with-content': '{% Tag %} avec contenu {% endTag %}',
 			'twig.comment': '{# Commentaire #}',
 			'twig.expression': '{{ Variable }}',
+			'twig.variables.empty': 'Aucune variable n\'est disponible pour ce template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',
 			'twig.variables.label': 'Description',
@@ -71,7 +73,10 @@ export default class TwigPluginUI extends Plugin {
 
 				const command = editor.commands.get( commandName );
 				buttonView.bind( 'isOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-				this.listenTo( buttonView, 'execute', () => editor.execute( commandName ) );
+				this.listenTo( buttonView, 'execute', () => {
+					editor.execute( commandName );
+					editor.editing.view.focus();
+				} );
 
 				return buttonView;
 			};
@@ -79,7 +84,7 @@ export default class TwigPluginUI extends Plugin {
 			const listView = dropdownView.listView = new ListView( locale );
 
 			listView.items.add( createDropdownButton( 'displayTwigVariables', 'twig.variables' ) );
-			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.comment' ) );
+			listView.items.add( createDropdownButton( 'insertTwigComment', 'twig.comment' ) );
 			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.expression' ) );
 			listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );
 			listView.items.add( createDropdownButton( 'insertTwigStatementWithContent', 'twig.statement-with-content' ) );

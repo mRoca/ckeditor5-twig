@@ -6,6 +6,12 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
+.twig-statement, .twig-comment {
+    font-family: Consolas, 'DejaVu Sans Mono', Courier, monospace;
+    color: #000;
+    font-size: 80%;
+}
+
 .twig-statement {
     background: #9dbfff !important;
 }
@@ -67,6 +73,8 @@ table.twig-variables thead th {
 }
 
 .twig-variables-example pre {
+    font-family: Consolas, 'DejaVu Sans Mono', Courier, monospace;
+    color: #000;
     background: #eee;
     font-size: 10px;
     margin: 0;

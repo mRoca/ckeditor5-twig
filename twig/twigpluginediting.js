@@ -6,7 +6,8 @@ import { InsertTwigStatementCommand, InsertTwigStatementWithContentCommand } fro
 import CommentEditing from './plugins/commentediting';
 import { InsertTwigExpressionCommand } from './plugins/expressioninsertcommand';
 import { InsertTwigCommentCommand } from './plugins/commentinsertcommand';
-import { DisplayTwigVariablesCommand } from './plugins/variablesdisplaycommand';
+import { DisplayTwigVariablesCommand } from './plugins/displayvariablescommand';
+import { DisplayTwigAvailableStatementsCommand } from './plugins/displaystatementscommand';
 
 export default class TwigPluginEditing extends Plugin {
 	static get requires() {
@@ -15,6 +16,7 @@ export default class TwigPluginEditing extends Plugin {
 
 	init() {
 		this.editor.commands.add( 'displayTwigVariables', new DisplayTwigVariablesCommand( this.editor ) );
+		this.editor.commands.add( 'displayTwigStatements', new DisplayTwigAvailableStatementsCommand( this.editor ) );
 		this.editor.commands.add( 'insertTwigComment', new InsertTwigCommentCommand( this.editor ) );
 		this.editor.commands.add( 'insertTwigExpression', new InsertTwigExpressionCommand( this.editor ) );
 		this.editor.commands.add( 'insertTwigStatement', new InsertTwigStatementCommand( this.editor ) );

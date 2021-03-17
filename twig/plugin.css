@@ -45,7 +45,24 @@
     content: "}";
 }
 
-/* Variables modal */
+/* Modales common */
+
+.twig-variables-example pre, .twig-statement-doc pre {
+    font-family: Consolas, 'DejaVu Sans Mono', Courier, monospace;
+    color: #000;
+    background: #eee;
+    font-size: 10px;
+    margin: 0;
+    padding: 4px 8px 10px !important;
+}
+
+.twig-variables-example a, .twig-statement-doc a {
+    text-decoration: none;
+    color: #4444e8;
+    font-size: 10px;
+}
+
+/* Variables modale */
 table.twig-variables {
     font-family: "Open Sans", sans-serif;
     font-size: 0.9em;
@@ -72,18 +89,20 @@ table.twig-variables thead th {
     text-transform: uppercase
 }
 
-.twig-variables-example pre {
-    font-family: Consolas, 'DejaVu Sans Mono', Courier, monospace;
-    color: #000;
-    background: #eee;
-    font-size: 10px;
-    margin: 0;
-    padding: 4px;
-    padding-bottom: 10px;
+/* Statements modale */
+.twig-statement-doc {
+    display: flex;
 }
-
-.twig-variables-example a {
-    text-decoration: none;
-    color: #4444e8;
-    font-size: 10px;
+.twig-statement-doc > div {
+    margin: auto;
+}
+.twig-statement-doc h3 {
+    margin: 0;
+}
+.twig-statement-doc a {
+    font-size: 14px;
+}
+.twig-statement-doc pre {
+    text-align: left;
+    line-height: 14px;
 }

@@ -20,6 +20,7 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement-with-content': 'Tag with content',
 			'twig.comment': 'Comment',
 			'twig.expression': 'Variable',
+			'twig.statements.insert': 'Insert a tag statement',
 			'twig.variables.empty': 'There is no available variables for this template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',
@@ -41,6 +42,7 @@ export default class TwigPluginUI extends Plugin {
 			'twig.statement-with-content': 'Boucle / Condition / Bloc',
 			'twig.comment': 'Commentaire',
 			'twig.expression': 'Variable',
+			'twig.statements.insert': 'Insérer un nouveau bloc',
 			'twig.variables.empty': 'Aucune variable n\'est disponible pour ce template.',
 			'twig.variables.name': 'Variable',
 			'twig.variables.type': 'Type',
@@ -87,7 +89,7 @@ export default class TwigPluginUI extends Plugin {
 			listView.items.add( createDropdownButton( 'insertTwigComment', 'twig.comment' ) );
 			listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.expression' ) );
 			listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );
-			listView.items.add( createDropdownButton( 'insertTwigStatementWithContent', 'twig.statement-with-content' ) );
+			listView.items.add( createDropdownButton( 'displayTwigStatements', 'twig.statement-with-content' ) );
 
 			dropdownView.bind( 'isEnabled' ).toMany( listView.items, 'isEnabled',
 				( ...areEnabled ) => areEnabled.some( isEnabled => isEnabled )

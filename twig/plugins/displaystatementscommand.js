@@ -24,6 +24,10 @@ export class DisplayTwigAvailableStatementsCommand extends Command {
     }
 
     refresh() {
-        this.isEnabled = true;
+        const model = this.editor.model;
+        const selection = model.document.selection;
+        const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigStatementContainer' );
+
+        this.isEnabled = allowedIn !== null;
     }
 }

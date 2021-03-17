@@ -15,11 +15,14 @@ export default class TwigPluginUI extends Plugin {
 
         addTranslationsIfNotExist( 'en', {
             'twig.commands': 'Twig commands',
-            'twig.variables': 'Variables',
+            'twig.variables': 'Variables list',
             'twig.statement': 'Tag',
             'twig.statement-with-content': 'Tag with content',
             'twig.comment': 'Comment',
             'twig.expression': 'Variable',
+            'twig.expression.label': 'Expression, e.g.: myVar|filter',
+            'twig.expression.insert': 'Insert the expression',
+            'twig.expression.required': 'You must write something',
             'twig.statements.insert': 'Insert a tag statement',
             'twig.variables.empty': 'There is no available variables for this template.',
             'twig.variables.name': 'Variable',
@@ -37,11 +40,14 @@ export default class TwigPluginUI extends Plugin {
 
         addTranslationsIfNotExist( 'fr', {
             'twig.commands': 'Commandes Twig',
-            'twig.variables': 'Variables',
+            'twig.variables': 'Liste des variables',
             'twig.statement': 'Instruction',
             'twig.statement-with-content': 'Boucle / Condition / Bloc',
             'twig.comment': 'Commentaire',
             'twig.expression': 'Variable',
+            'twig.expression.label': 'Variable, par exemple: maVariable|filter',
+            'twig.expression.insert': 'Insérer l\'expression',
+            'twig.expression.required': 'Vous devez entrer une valeur',
             'twig.statements.insert': 'Insérer un nouveau bloc',
             'twig.variables.empty': 'Aucune variable n\'est disponible pour ce template.',
             'twig.variables.name': 'Variable',

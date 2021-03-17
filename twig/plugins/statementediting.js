@@ -11,7 +11,7 @@ import { disableRichTextFor } from '../utils';
  *         <div class="twig-statement-content">baz</div>
  *      </section>
  */
-export default class TwigPluginEditing extends Plugin {
+export default class StatementEditing extends Plugin {
 	static get requires() {
 		return [ Widget ];
 	}

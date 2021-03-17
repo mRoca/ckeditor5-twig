@@ -109,11 +109,15 @@ function twig2html( content ) {
 	function twigComment( content ) {
 		content = content.trim();
 
+		const containerEl = document.createElement( 'section' );
+		containerEl.className = 'twig-comment-container';
+
 		const el = document.createElement( 'div' );
 		el.className = 'twig-comment';
 		el.innerText = content;
 
-		return el.outerHTML;
+		containerEl.append( el );
+		return containerEl.outerHTML;
 	}
 
 	return content;
@@ -124,8 +128,13 @@ function html2twig( content ) {
 	const doc = parser.parseFromString( content, 'text/html' );
 
 	// Comments: {# $1 #}
-	Array.from( doc.getElementsByClassName( 'twig-comment' ) ).forEach( el => {
-		el.parentNode.replaceChild( document.createTextNode( `{# ${ el.innerHTML } #}` ), el );
+	Array.from( doc.getElementsByClassName( 'twig-comment-container' ) ).forEach( el => {
+		const commentEl = Array.from( el.children ).filter( child => child.classList.contains( 'twig-comment' ) )[ 0 ];
+		if ( !commentEl ) {
+			return;
+		}
+		const comment = commentEl.textContent.trim();
+		el.parentNode.replaceChild( document.createTextNode( `{# ${ comment } #}` ), el );
 	} );
 
 	// Expressions: {{ $1 }}

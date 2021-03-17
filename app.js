@@ -20,34 +20,34 @@ import './demo.css';
 import 'highlight.js/styles/agate.css';
 
 ClassicEditor
-	.create( document.querySelector( '#editor' ), {
-		plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
-		toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigCommands' ],
-		twig: {
-			variables: window.availableVariables // Defined in the index.html file
-		}
-	} )
-	.then( editor => {
-		// Add the inspector (see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)
-		CKEditorInspector.attach( editor, { isCollapsed: true } );
+    .create( document.querySelector( '#editor' ), {
+        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
+        toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigCommands' ],
+        twig: {
+            variables: window.availableVariables // Defined in the index.html file
+        }
+    } )
+    .then( editor => {
+    // Add the inspector (see https://ckeditor.com/docs/ckeditor5/latest/framework/guides/development-tools.html)
+        CKEditorInspector.attach( editor, { isCollapsed: true } );
 
-		// Expose for playing in the console.
-		window.editor = editor;
-	} )
-	.catch( error => {
-		console.error( error.stack );
-	} );
+        // Expose for playing in the console.
+        window.editor = editor;
+    } )
+    .catch( error => {
+        console.error( error.stack );
+    } );
 
 window.displaySource = function() {
-	prettydiff.options.mode = 'beautify';
-	prettydiff.options.language = 'twig';
-	prettydiff.options.force_indent = true;
-	prettydiff.options.source = window.editor.getData();
+    prettydiff.options.mode = 'beautify';
+    prettydiff.options.language = 'twig';
+    prettydiff.options.force_indent = true;
+    prettydiff.options.source = window.editor.getData();
 
-	document.getElementById( 'output' ).innerText = prettydiff();
-	hljs.highlightBlock( document.getElementById( 'output' ) );
+    document.getElementById( 'output' ).innerText = prettydiff();
+    hljs.highlightBlock( document.getElementById( 'output' ) );
 };
 
 document.addEventListener( 'DOMContentLoaded', () => {
-	window.displaySource();
+    window.displaySource();
 } );

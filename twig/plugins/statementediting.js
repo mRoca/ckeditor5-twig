@@ -12,125 +12,125 @@ import { disableRichTextFor } from '../utils';
  *      </section>
  */
 export default class StatementEditing extends Plugin {
-	static get requires() {
-		return [ Widget ];
-	}
+    static get requires() {
+        return [ Widget ];
+    }
 
-	init() {
-		this._defineSchema();
-		this._defineConverters();
-	}
+    init() {
+        this._defineSchema();
+        this._defineConverters();
+    }
 
-	_defineSchema() {
-		const schema = this.editor.model.schema;
+    _defineSchema() {
+        const schema = this.editor.model.schema;
 
-		schema.register( 'twigStatementContainer', {
-			isObject: true,
-			allowWhere: '$block'
-		} );
+        schema.register( 'twigStatementContainer', {
+            isObject: true,
+            allowWhere: '$block'
+        } );
 
-		schema.register( 'twigStatement', {
-			isLimit: true,
-			allowIn: 'twigStatementContainer',
-			isBlock: true,
-			allowContentOf: '$text'
-		} );
+        schema.register( 'twigStatement', {
+            isLimit: true,
+            allowIn: 'twigStatementContainer',
+            isBlock: true,
+            allowContentOf: '$text'
+        } );
 
-		schema.extend( '$text', {
-			allowIn: 'twigStatement',
-			isLimit: true
-		} );
+        schema.extend( '$text', {
+            allowIn: 'twigStatement',
+            isLimit: true
+        } );
 
-		disableRichTextFor( schema, 'twigStatement' );
+        disableRichTextFor( schema, 'twigStatement' );
 
-		schema.register( 'twigStatementContent', {
-			isLimit: true,
-			allowIn: 'twigStatementContainer',
-			allowContentOf: '$root'
-		} );
+        schema.register( 'twigStatementContent', {
+            isLimit: true,
+            allowIn: 'twigStatementContainer',
+            allowContentOf: '$root'
+        } );
 
-		// TODO Find a way to avoid a new Paragraph adding into this element:
-		// https://github.com/ckeditor/ckeditor5-paragraph/blob/b54105be2906b887f4d32a7f447b5bb0fb1d216c/src/paragraph.js#L122-L137
-	}
+    // TODO Find a way to avoid a new Paragraph adding into this element:
+    // https://github.com/ckeditor/ckeditor5-paragraph/blob/b54105be2906b887f4d32a7f447b5bb0fb1d216c/src/paragraph.js#L122-L137
+    }
 
-	_defineConverters() {
-		const conversion = this.editor.conversion;
+    _defineConverters() {
+        const conversion = this.editor.conversion;
 
-		// <twigStatementContainer> converters
-		conversion.for( 'upcast' ).elementToElement( {
-			model: 'twigStatementContainer',
-			view: {
-				name: 'section',
-				classes: 'twig-statement-container'
-			}
-		} );
-		conversion.for( 'dataDowncast' ).elementToElement( {
-			model: 'twigStatementContainer',
-			view: {
-				name: 'section',
-				classes: 'twig-statement-container'
-			}
-		} );
-		conversion.for( 'editingDowncast' ).elementToElement( {
-			model: 'twigStatementContainer',
-			view: ( modelElement, { writer: viewWriter } ) => {
-				const section = viewWriter.createContainerElement( 'section', { class: 'twig-statement-container' } );
+        // <twigStatementContainer> converters
+        conversion.for( 'upcast' ).elementToElement( {
+            model: 'twigStatementContainer',
+            view: {
+                name: 'section',
+                classes: 'twig-statement-container'
+            }
+        } );
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'twigStatementContainer',
+            view: {
+                name: 'section',
+                classes: 'twig-statement-container'
+            }
+        } );
+        conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'twigStatementContainer',
+            view: ( modelElement, { writer: viewWriter } ) => {
+                const section = viewWriter.createContainerElement( 'section', { class: 'twig-statement-container' } );
 
-				return toWidget( section, viewWriter, { label: 'twig statement widget' } );
-			}
-		} );
+                return toWidget( section, viewWriter, { label: 'twig statement widget' } );
+            }
+        } );
 
-		// <twigStatement> converters
-		// Loading the data to the editor
-		conversion.for( 'upcast' ).elementToElement( {
-			model: 'twigStatement',
-			view: {
-				name: 'div',
-				classes: 'twig-statement'
-			}
-		} );
+        // <twigStatement> converters
+        // Loading the data to the editor
+        conversion.for( 'upcast' ).elementToElement( {
+            model: 'twigStatement',
+            view: {
+                name: 'div',
+                classes: 'twig-statement'
+            }
+        } );
 
-		// Retrieving the data from the editor
-		conversion.for( 'dataDowncast' ).elementToElement( {
-			model: 'twigStatement',
-			view: {
-				name: 'div',
-				classes: 'twig-statement'
-			}
-		} );
+        // Retrieving the data from the editor
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'twigStatement',
+            view: {
+                name: 'div',
+                classes: 'twig-statement'
+            }
+        } );
 
-		// Rendering the editor content to the user for editing
-		conversion.for( 'editingDowncast' ).elementToElement( {
-			model: 'twigStatement',
-			view: ( modelElement, { writer: viewWriter } ) => {
-				const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-statement' } );
+        // Rendering the editor content to the user for editing
+        conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'twigStatement',
+            view: ( modelElement, { writer: viewWriter } ) => {
+                const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-statement' } );
 
-				return toWidgetEditable( pre, viewWriter );
-			}
-		} );
+                return toWidgetEditable( pre, viewWriter );
+            }
+        } );
 
-		// <twigStatementContent> converters
-		conversion.for( 'upcast' ).elementToElement( {
-			model: 'twigStatementContent',
-			view: {
-				name: 'div',
-				classes: 'twig-statement-content'
-			}
-		} );
-		conversion.for( 'dataDowncast' ).elementToElement( {
-			model: 'twigStatementContent',
-			view: {
-				name: 'div',
-				classes: 'twig-statement-content'
-			}
-		} );
-		conversion.for( 'editingDowncast' ).elementToElement( {
-			model: 'twigStatementContent',
-			view: ( modelElement, { writer: viewWriter } ) => {
-				const div = viewWriter.createEditableElement( 'div', { class: 'twig-statement-content' } );
+        // <twigStatementContent> converters
+        conversion.for( 'upcast' ).elementToElement( {
+            model: 'twigStatementContent',
+            view: {
+                name: 'div',
+                classes: 'twig-statement-content'
+            }
+        } );
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'twigStatementContent',
+            view: {
+                name: 'div',
+                classes: 'twig-statement-content'
+            }
+        } );
+        conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'twigStatementContent',
+            view: ( modelElement, { writer: viewWriter } ) => {
+                const div = viewWriter.createEditableElement( 'div', { class: 'twig-statement-content' } );
 
-				return toWidgetEditable( div, viewWriter );
-			}
-		} );
-	}
+                return toWidgetEditable( div, viewWriter );
+            }
+        } );
+    }
 }

@@ -11,92 +11,92 @@ import { disableRichTextFor } from '../utils';
  *      </section>
  */
 export default class CommentEditing extends Plugin {
-	static get requires() {
-		return [ Widget ];
-	}
+    static get requires() {
+        return [ Widget ];
+    }
 
-	init() {
-		this._defineSchema();
-		this._defineConverters();
-	}
+    init() {
+        this._defineSchema();
+        this._defineConverters();
+    }
 
-	_defineSchema() {
-		const schema = this.editor.model.schema;
+    _defineSchema() {
+        const schema = this.editor.model.schema;
 
-		schema.register( 'twigCommentContainer', {
-			isObject: true,
-			allowWhere: '$block'
-		} );
+        schema.register( 'twigCommentContainer', {
+            isObject: true,
+            allowWhere: '$block'
+        } );
 
-		schema.register( 'twigComment', {
-			isLimit: true,
-			allowIn: 'twigCommentContainer',
-			isBlock: true,
-			allowContentOf: '$text'
-		} );
+        schema.register( 'twigComment', {
+            isLimit: true,
+            allowIn: 'twigCommentContainer',
+            isBlock: true,
+            allowContentOf: '$text'
+        } );
 
-		schema.extend( '$text', {
-			allowIn: 'twigComment',
-			isLimit: true
-		} );
+        schema.extend( '$text', {
+            allowIn: 'twigComment',
+            isLimit: true
+        } );
 
-		disableRichTextFor( schema, 'twigComment' );
-	}
+        disableRichTextFor( schema, 'twigComment' );
+    }
 
-	_defineConverters() {
-		const conversion = this.editor.conversion;
+    _defineConverters() {
+        const conversion = this.editor.conversion;
 
-		// <twigCommentContainer> converters
-		conversion.for( 'upcast' ).elementToElement( {
-			model: 'twigCommentContainer',
-			view: {
-				name: 'section',
-				classes: 'twig-comment-container'
-			}
-		} );
-		conversion.for( 'dataDowncast' ).elementToElement( {
-			model: 'twigCommentContainer',
-			view: {
-				name: 'section',
-				classes: 'twig-comment-container'
-			}
-		} );
-		conversion.for( 'editingDowncast' ).elementToElement( {
-			model: 'twigCommentContainer',
-			view: ( modelElement, { writer: viewWriter } ) => {
-				const section = viewWriter.createContainerElement( 'section', { class: 'twig-comment-container' } );
+        // <twigCommentContainer> converters
+        conversion.for( 'upcast' ).elementToElement( {
+            model: 'twigCommentContainer',
+            view: {
+                name: 'section',
+                classes: 'twig-comment-container'
+            }
+        } );
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'twigCommentContainer',
+            view: {
+                name: 'section',
+                classes: 'twig-comment-container'
+            }
+        } );
+        conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'twigCommentContainer',
+            view: ( modelElement, { writer: viewWriter } ) => {
+                const section = viewWriter.createContainerElement( 'section', { class: 'twig-comment-container' } );
 
-				return toWidget( section, viewWriter, { label: 'twig comment widget' } );
-			}
-		} );
+                return toWidget( section, viewWriter, { label: 'twig comment widget' } );
+            }
+        } );
 
-		// <twigComment> converters
-		// Loading the data to the editor
-		conversion.for( 'upcast' ).elementToElement( {
-			model: 'twigComment',
-			view: {
-				name: 'div',
-				classes: 'twig-comment'
-			}
-		} );
+        // <twigComment> converters
+        // Loading the data to the editor
+        conversion.for( 'upcast' ).elementToElement( {
+            model: 'twigComment',
+            view: {
+                name: 'div',
+                classes: 'twig-comment'
+            }
+        } );
 
-		// Retrieving the data from the editor
-		conversion.for( 'dataDowncast' ).elementToElement( {
-			model: 'twigComment',
-			view: {
-				name: 'div',
-				classes: 'twig-comment'
-			}
-		} );
+        // Retrieving the data from the editor
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'twigComment',
+            view: {
+                name: 'div',
+                classes: 'twig-comment'
+            }
+        } );
 
-		// Rendering the editor content to the user for editing
-		conversion.for( 'editingDowncast' ).elementToElement( {
-			model: 'twigComment',
-			view: ( modelElement, { writer: viewWriter } ) => {
-				const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-comment' } );
+        // Rendering the editor content to the user for editing
+        conversion.for( 'editingDowncast' ).elementToElement( {
+            model: 'twigComment',
+            view: ( modelElement, { writer: viewWriter } ) => {
+                const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-comment' } );
 
-				return toWidgetEditable( pre, viewWriter );
-			}
-		} );
-	}
+                return toWidgetEditable( pre, viewWriter );
+            }
+        } );
+    }
 }

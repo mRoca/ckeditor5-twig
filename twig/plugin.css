@@ -30,19 +30,25 @@
 
 .twig-comment::before {
     content: "# ";
+    color: orange;
 }
 
 .twig-expression {
     background: yellow;
     margin: 0 4px;
+    cursor: pointer;
 }
 
 .twig-expression::before {
     content: "{";
+    color: orange;
+    padding-right: 2px;
 }
 
 .twig-expression::after {
     content: "}";
+    color: orange;
+    padding-left: 2px;
 }
 
 /* Modales common */

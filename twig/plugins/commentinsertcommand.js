@@ -1,5 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget';
+import first from '@ckeditor/ckeditor5-utils/src/first';
 
 export class InsertTwigCommentCommand extends Command {
     execute() {
@@ -14,10 +15,8 @@ export class InsertTwigCommentCommand extends Command {
 
     refresh() {
         const model = this.editor.model;
-        const selection = model.document.selection;
-        const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigCommentContainer' );
-
-        this.isEnabled = allowedIn !== null;
+        const firstBlock = first( model.document.selection.getSelectedBlocks() );
+        this.isEnabled = !!firstBlock && model.schema.checkChild( firstBlock.parent, 'twigCommentContainer' );
     }
 }
 

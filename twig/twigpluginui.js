@@ -3,6 +3,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import ListView from '@ckeditor/ckeditor5-ui/src/list/listview';
 import { addTranslationsIfNotExist } from './utils';
+import { ClickObserver } from '@ckeditor/ckeditor5-engine';
 
 export default class TwigPluginUI extends Plugin {
     static get requires() {
@@ -10,9 +11,12 @@ export default class TwigPluginUI extends Plugin {
     }
 
     init() {
-        const editor = this.editor;
-        const t = editor.t;
+        this._addTranslations();
+        this._addDropdown();
+        this._addClickObserver();
+    }
 
+    _addTranslations() {
         addTranslationsIfNotExist( 'en', {
             'twig.commands': 'Twig commands',
             'twig.variables': 'Variables list',
@@ -62,6 +66,11 @@ export default class TwigPluginUI extends Plugin {
             'twig.variables.type.datetime': 'Date et heure',
             'twig.variables.type.unknown': 'Inconnu'
         } );
+    }
+
+    _addDropdown() {
+        const editor = this.editor;
+        const t = editor.t;
 
         editor.ui.componentFactory.add( 'twigCommands', locale => {
             const dropdownView = createDropdown( locale );
@@ -105,6 +114,21 @@ export default class TwigPluginUI extends Plugin {
             listView.items.delegate( 'execute' ).to( dropdownView );
 
             return dropdownView;
+        } );
+    }
+
+    _addClickObserver() {
+        const editor = this.editor;
+        const view = editor.editing.view;
+
+        view.addObserver( ClickObserver );
+
+        editor.listenTo( view.document, 'click', ( evt, data ) => {
+            const modelElement = editor.editing.mapper.toModelElement( data.target );
+
+            if ( modelElement.name === 'twigExpression' ) {
+                editor.commands.get( 'insertTwigExpression' ).execute();
+            }
         } );
     }
 }

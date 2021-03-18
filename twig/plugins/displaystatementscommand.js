@@ -1,6 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
 import htmlContent from './displaystatementscommand.html';
+import first from '@ckeditor/ckeditor5-utils/src/first';
 
 export class DisplayTwigAvailableStatementsCommand extends Command {
     execute() {
@@ -25,9 +26,7 @@ export class DisplayTwigAvailableStatementsCommand extends Command {
 
     refresh() {
         const model = this.editor.model;
-        const selection = model.document.selection;
-        const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigStatementContainer' );
-
-        this.isEnabled = allowedIn !== null;
+        const firstBlock = first( model.document.selection.getSelectedBlocks() );
+        this.isEnabled = !!firstBlock && model.schema.checkChild( firstBlock.parent, 'twigStatementContainer' );
     }
 }

@@ -5,33 +5,41 @@ export class InsertTwigExpressionCommand extends Command {
     async execute( value ) {
         const editor = this.editor;
 
-        value = value || await this._displayModale();
+        value = value || await this._displayModale( this.value );
 
         if ( !value ) {
             return;
         }
 
-        editor.model.change( async writer => {
+        editor.model.change( writer => {
             const el = createTwigExpression( writer, value );
             editor.model.insertContent( el );
-            writer.setSelection( el, 'after' );
+            writer.setSelection( el, 'on' );
+            editor.editing.view.focus(); // Must be called here, as this function is after an await
         } );
     }
 
     refresh() {
         const model = this.editor.model;
         const selection = model.document.selection;
-        const allowedIn = model.schema.findAllowedParent( selection.getFirstPosition(), 'twigExpression' );
+        const selectedEl = selection.getSelectedElement();
 
-        this.isEnabled = allowedIn !== null;
+        if ( !!selectedEl && selectedEl.is( 'element', 'twigExpression' ) ) {
+            this.value = selectedEl.getAttribute( 'content' );
+        } else {
+            this.value = undefined;
+        }
+
+        this.isEnabled = model.schema.checkChild( selection.focus.parent, 'twigExpression' );
     }
 
-    async _displayModale() {
+    async _displayModale( currentValue ) {
         const t = this.editor.t;
         const { value } = await Swal.fire( {
             title: t( 'twig.expression' ),
             input: 'text',
             inputLabel: t( 'twig.expression.label' ),
+            inputValue: currentValue || '',
             showCancelButton: true,
             confirmButtonText: t( 'twig.expression.insert' ),
             inputValidator: value => {

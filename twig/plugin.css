@@ -59,7 +59,7 @@
     background: #eee;
     font-size: 10px;
     margin: 0;
-    padding: 4px 8px 10px !important;
+    padding: 6px !important;
 }
 
 .twig-variables-example a, .twig-statement-doc a {
@@ -68,6 +68,7 @@
     font-size: 10px;
 }
 
+/* ================ */
 /* Variables modale */
 table.twig-variables {
     font-family: "Open Sans", sans-serif;
@@ -95,15 +96,42 @@ table.twig-variables thead th {
     text-transform: uppercase
 }
 
+/* Child table td */
+table.twig-variables tbody td[colspan] {
+    padding-left: 50px;
+    padding-right: 0;
+    padding-bottom: 10px;
+}
+
+/* Type column */
+table.twig-variables thead th:nth-child(2), table.twig-variables tbody td:nth-child(2) {
+    width: 10rem;
+}
+
+/* Description column */
+table.twig-variables thead th:nth-child(3), table.twig-variables tbody td:nth-child(3) {
+    width: 50rem;
+}
+
+/* Button column */
+table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-child(4) {
+    width: 140px;
+    text-align: center;
+}
+
+/* ================= */
 /* Statements modale */
 .twig-statement-doc {
     display: flex;
 }
 .twig-statement-doc > div {
     margin: auto;
+    margin-top: 0;
 }
 .twig-statement-doc h3 {
     margin: 0;
+    margin-bottom: 10px;
+    border: none;
 }
 .twig-statement-doc a {
     font-size: 14px;
@@ -111,4 +139,23 @@ table.twig-variables thead th {
 .twig-statement-doc pre {
     text-align: left;
     line-height: 14px;
+    margin-top: 6px;
+}
+
+.twig-statement-doc button {
+    border: 0;
+    border-radius: .25em;
+    background: #2778c4;
+    color: #fff;
+    padding: 6px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 14px;
+    cursor: pointer;
+}
+
+.twig-statement-doc button:hover {
+    background-color: #448acb;
 }

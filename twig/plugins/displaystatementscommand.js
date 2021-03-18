@@ -11,14 +11,27 @@ export class DisplayTwigAvailableStatementsCommand extends Command {
         editor.model.change( async () => {
             const result = await Swal.fire( {
                 title: t( 'twig.statement-with-content' ),
-                width: '80%',
-                html: htmlContent,
-                confirmButtonText: t( 'twig.statements.insert' ),
-                footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
+                width: '90%',
+                html: htmlContent.replaceAll( 'twig.statements.insert', t( 'twig.statements.insert' ) ),
+                showConfirmButton: false,
+                footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>',
+                didOpen: popup => {
+                    const buttons = popup.querySelectorAll( 'button' );
+                    buttons.forEach( el => el.addEventListener( 'click', event => {
+                        const btn = event.target;
+                        editor.execute( 'insertTwigStatement', {
+                            statement: btn.getAttribute( 'data-statement' ),
+                            withElse: btn.hasAttribute( 'data-with-else' ),
+                            withContent: true
+                        } );
+                        editor.editing.view.focus();
+                        Swal.close();
+                    } ) );
+                }
             } );
 
             if ( result.isConfirmed ) {
-                editor.execute( 'insertTwigStatementWithContent' );
+                editor.execute( 'insertTwigStatement', { withContent: true } );
                 editor.editing.view.focus();
             }
         } );

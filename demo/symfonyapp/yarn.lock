@@ -2028,7 +2028,7 @@ chrome-trace-event@^1.0.2:
 
 ckeditor5-twig@mRoca/ckeditor5-twig#master:
   version "0.0.5"
-  resolved "https://codeload.github.com/mRoca/ckeditor5-twig/tar.gz/8cfad9f3501169ccffe0947521b2bb5b56ec2626"
+  resolved "https://codeload.github.com/mRoca/ckeditor5-twig/tar.gz/5b8c874bc611fd45a25fd636ccc55ed3b9602197"
   dependencies:
     "@ckeditor/ckeditor5-core" "^26.0.0"
     "@ckeditor/ckeditor5-engine" "^26.0.0"

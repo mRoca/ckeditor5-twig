@@ -1,5 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
+import { ButtonView } from '@ckeditor/ckeditor5-ui';
 
 export const variablesTypes = [ 'object', 'array', 'string', 'boolean', 'bool', 'integer', 'int', 'float', 'datetime', 'unknown' ];
 
@@ -12,7 +13,7 @@ export class DisplayTwigVariablesCommand extends Command {
             Swal.fire( {
                 title: t( 'twig.variables' ),
                 width: '80%',
-                html: this._createVariablesHtmlOutput( variables ),
+                html: this._getTableElement( variables ),
                 footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
             } );
         } );
@@ -22,7 +23,17 @@ export class DisplayTwigVariablesCommand extends Command {
         this.isEnabled = true;
     }
 
-    _createVariablesHtmlOutput( vars ) {
+    _getTableElement( vars ) {
+        const hash = JSON.stringify( vars );
+
+        if ( this._cachedTables && this._cachedTables[ hash ] ) {
+            return this._cachedTables[ hash ];
+        }
+
+        return this._createVariablesTable( vars );
+    }
+
+    _createVariablesTable( vars, parents = [] ) {
         const t = this.editor.t;
 
         if ( typeof vars !== 'object' || vars === null || Object.keys( vars ).length === 0 ) {
@@ -33,21 +44,25 @@ export class DisplayTwigVariablesCommand extends Command {
 
         const tableEl = document.createElement( 'table' );
         tableEl.className = 'twig-variables';
-        const theadEl = document.createElement( 'thead' );
 
-        const headTrEl = document.createElement( 'tr' );
-        headTrEl.append(
-            textElement( 'th', t( 'twig.variables.name' ) ),
-            textElement( 'th', t( 'twig.variables.type' ) ),
-            textElement( 'th', t( 'twig.variables.label' ) )
-        );
-        theadEl.append( headTrEl );
-        tableEl.append( theadEl );
+        // If it's the main table, add the headers
+        if ( !parents || !parents.length ) {
+            const theadEl = document.createElement( 'thead' );
+            const headTrEl = document.createElement( 'tr' );
+            headTrEl.append(
+                textElement( 'th', t( 'twig.variables.name' ) ),
+                textElement( 'th', t( 'twig.variables.type' ) ),
+                textElement( 'th', t( 'twig.variables.label' ) ),
+                textElement( 'th', '' )
+            );
+            theadEl.append( headTrEl );
+            tableEl.append( theadEl );
+        }
 
         const lines = Object.entries( vars ).map( ( [ name, conf ] ) => this._createVariableDomOutput( name, conf ) );
         tableEl.append( ...lines );
 
-        return tableEl.outerHTML;
+        return tableEl;
     }
 
     _createVariableDomOutput( name, conf ) {
@@ -72,40 +87,52 @@ export class DisplayTwigVariablesCommand extends Command {
         }
         tr.append( labelEl );
 
+        // Button
+        const btnTdEl = document.createElement( 'td' );
+        const btn = this._renderInsertButton( name, conf );
+        if ( btn ) {
+            btnTdEl.append( btn );
+        }
+        tr.append( btnTdEl );
+
         // Add the line
         tbody.append( tr );
 
-        const createChildrenTr = objConf => {
+        const createChildrenTr = ( objConf, parents = [] ) => {
             const childrenTr = document.createElement( 'tr' );
             if ( !objConf.properties || !Object.keys( objConf.properties ).length ) {
                 return childrenTr;
             }
 
-            childrenTr.append( textElement( 'td', '' ) );
             const childrenTd = document.createElement( 'td' );
-            childrenTd.colSpan = 2;
-            childrenTd.innerHTML = this._createVariablesHtmlOutput( objConf.properties );
+            childrenTd.colSpan = 4;
+            childrenTd.append( this._createVariablesTable( objConf.properties, parents || [] ) );
             childrenTr.append( childrenTd );
 
             return childrenTr;
         };
 
+        const childrenParents = [ ...( conf._parents || [] ), name ];
         if ( cleanType === 'object' && typeof conf.properties === 'object' && Object.keys( conf.properties ).length > 0 ) {
             Object.keys( conf.properties ).forEach( key => {
                 // Add parent name to objects for examples
-                conf.properties[ key ].parentName = ( conf.parentName || '' ) + name + '.';
+                conf.properties[ key ]._parentName = ( conf._parentName || '' ) + name + '.';
+                // Build a parents array in order to know how deep we are
+                conf.properties[ key ]._parents = childrenParents;
             } );
 
-            tbody.append( createChildrenTr( conf ) );
+            tbody.append( createChildrenTr( conf, childrenParents ) );
         }
 
         if ( cleanType === 'array' && conf.children && conf.children.type === 'object' ) {
             Object.keys( conf.children.properties || {} ).forEach( key => {
                 // Add parent name to objects for examples
-                conf.children.properties[ key ].parentName = arrayItemName( name ) + '.';
+                conf.children.properties[ key ]._parentName = arrayItemName( name ) + '.';
+                // Build a parents array in order to know how deep we are
+                conf.children.properties[ key ]._parents = childrenParents;
             } );
 
-            tbody.append( createChildrenTr( conf.children ) );
+            tbody.append( createChildrenTr( conf.children, childrenParents ) );
         }
 
         return tbody;
@@ -152,6 +179,54 @@ export class DisplayTwigVariablesCommand extends Command {
         return type;
     }
 
+    _renderInsertButton( name, conf ) {
+        const editor = this.editor;
+        const t = editor.t;
+
+        const view = new ButtonView();
+        const commandArgs = this._getCommandByType( name, conf );
+        if ( !commandArgs || !commandArgs.length ) {
+            return undefined;
+        }
+
+        const commandName = commandArgs.shift();
+
+        view.set( {
+            label: t( 'twig.variable.insert' ),
+            tooltip: t( 'twig.variable.insert.tooltip' ),
+            withText: true
+        } );
+
+        const command = editor.commands.get( commandName );
+        view.bind( 'isEnabled' ).to( command, 'isEnabled' );
+        view.on( 'execute', () => {
+            editor.execute( commandName, ...commandArgs );
+            editor.editing.view.focus();
+            Swal.close();
+        } );
+
+        view.render();
+        return view.element;
+    }
+
+    _getCommandByType( name, conf ) {
+        switch ( conf.type ) {
+        case 'string':
+        case 'integer':
+            return [ 'insertTwigExpression', name ];
+        case 'float':
+            return [ 'insertTwigExpression', `${ name } | number_format(2)` ];
+        case 'datetime':
+            return [ 'insertTwigExpression', `${ name } | format_date` ];
+        case 'boolean':
+            return [ 'insertTwigStatement', { statement: `if ${ name }`, withContent: true } ];
+        case 'array':
+            return [ 'insertTwigStatement', { statement: `for ${ arrayItemName( name ) } in ${ name }`, withContent: true } ];
+        default:
+            return [];
+        }
+    }
+
     _singleLineUsageExample( name, type ) {
         switch ( type ) {
         case 'string':
@@ -175,7 +250,7 @@ export class DisplayTwigVariablesCommand extends Command {
 
     _usageExample( name, conf ) {
         const originalName = name;
-        name = ( conf.parentName || '' ) + name;
+        name = ( conf._parentName || '' ) + name;
 
         const type = this._cleanType( conf.type );
         const linkEl = document.createElement( 'a' );
@@ -190,7 +265,7 @@ export class DisplayTwigVariablesCommand extends Command {
             codeEl.innerText = `
 {{ ${ name } }}
 {{ ${ name }|upper }}
-`;
+`.trim();
             break;
         case 'integer':
         case 'float':
@@ -198,21 +273,21 @@ export class DisplayTwigVariablesCommand extends Command {
             codeEl.innerText = `
 {{ ${ name } }}
 {{ ${ name }|number_format(2) }}
-`;
+`.trim();
             break;
         case 'datetime':
             linkEl.href = 'https://twig.symfony.com/doc/3.x/filters/format_datetime.html';
             codeEl.innerText = `
 {{ ${ name }|format_date }}
 {{ ${ name }|format_datetime }}
-{{ ${ name }||format_datetime('short', 'none', locale='fr') }}
-`;
+{{ ${ name }|format_datetime('short', 'none', locale='fr') }}
+`.trim();
             break;
         case 'boolean':
             codeEl.innerText = `
 {{ ${ name } ? 'yes' : 'no' }}
 {% if ${ name } %} yes {% else %} no {% endif %}
-`;
+`.trim();
             break;
         case 'array': {
             const childExample = this._singleLineUsageExample( `${ arrayItemName( originalName ) }`, this._cleanType( conf.children.type ) );
@@ -226,7 +301,7 @@ Total: {{ ${ name }|length }}
 {% else %}
     There is no ${ name }
 {% endfor %}
-`;
+`.trim();
             break;
         }
         case 'object':

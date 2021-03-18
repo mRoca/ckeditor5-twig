@@ -2,33 +2,52 @@
     <div>
         <h3 class="twig-statement">if X</h3>
         <a href="https://twig.symfony.com/doc/3.x/tags/for.html" target="_blank">Documentation</a>
-        <pre><code class="twig">
-{% if condition %}
+        <pre><code class="twig">{% if condition %}
     ...
     ...
-{% endif %}
-</code></pre>
+{% endif %}</code></pre>
+        <button type="button" data-statement="if ">twig.statements.insert</button>
+    </div>
+
+    <div>
+        <h3 class="twig-statement">if X else</h3>
+        <a href="https://twig.symfony.com/doc/3.x/tags/for.html" target="_blank">Documentation</a>
+        <pre><code class="twig">{% if condition %}
+    ...
+{% else %}
+    ...
+{% endif %}</code></pre>
+        <button type="button" data-statement="if X" data-with-else>twig.statements.insert</button>
 
     </div>
 
     <div>
         <h3 class="twig-statement">for X in Y</h3>
         <a href="https://twig.symfony.com/doc/3.x/tags/if.html" target="_blank">Documentation</a>
-        <pre><code class="twig">
-{% for item in items %}
+        <pre><code class="twig">{% for item in items %}
     {{ item }}
-{% endfor %}
-</code></pre>
+{% endfor %}</code></pre>
+        <button type="button" data-statement="for item in X">twig.statements.insert</button>
+    </div>
+
+    <div>
+        <h3 class="twig-statement">for X in Y else</h3>
+        <a href="https://twig.symfony.com/doc/3.x/tags/if.html" target="_blank">Documentation</a>
+        <pre><code class="twig">{% for item in items %}
+    {{ item }}
+{% else %}
+    Nothing to display
+{% endfor %}</code></pre>
+        <button type="button" data-statement="for item in X" data-with-else>twig.statements.insert</button>
     </div>
 
     <div>
         <h3 class="twig-statement">block X</h3>
         <a href="https://twig.symfony.com/doc/3.x/tags/extends.html#child-template" target="_blank">Documentation</a>
-        <pre><code class="twig">
-{% block blockName %}
+        <pre><code class="twig">{% block blockName %}
     ...
     ...
-{% endblock %}
-</code></pre>
+{% endblock %}</code></pre>
+        <button type="button" data-statement="">twig.statements.insert</button>
     </div>
 </div>

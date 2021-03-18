@@ -46,8 +46,7 @@ export class InsertTwigExpressionCommand extends Command {
                 if ( !value.trim() ) {
                     return t( 'twig.expression.required' );
                 }
-            },
-            footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
+            }
         } );
 
         return value;

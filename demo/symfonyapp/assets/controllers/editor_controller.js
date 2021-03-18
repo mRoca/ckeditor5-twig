@@ -11,6 +11,7 @@ import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
 /* twig plugin */
 import TwigPlugin from 'ckeditor5-twig/twig/twigplugin';
 import 'ckeditor5-twig/twig/plugin.css';
+import HtmlEmbed from "@ckeditor/ckeditor5-html-embed/src/htmlembed";
 
 export default class extends Controller {
 	static values = {
@@ -20,10 +21,10 @@ export default class extends Controller {
 	connect() {
 		ClassicEditor
 			.create( this.element, {
-				plugins: [ Essentials, Paragraph, Heading, Bold, Italic, TwigPlugin ],
-				toolbar: [ 'heading', 'bold', 'italic', 'twigCommands' ],
+				plugins: [ Essentials, Paragraph, Heading, Bold, Italic, HtmlEmbed, TwigPlugin ],
+				toolbar: [ 'heading', 'bold', 'italic', 'htmlEmbed', 'twigCommands' ],
 				twig: {
-					variables: this.variablesValue,
+					variables: this.variablesValue || {},
 				}
 			} )
 			.catch( error => {

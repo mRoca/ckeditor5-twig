@@ -126,7 +126,7 @@ export default class TwigPluginUI extends Plugin {
         editor.listenTo( view.document, 'click', ( evt, data ) => {
             const modelElement = editor.editing.mapper.toModelElement( data.target );
 
-            if ( modelElement.name === 'twigExpression' ) {
+            if ( modelElement && modelElement.name === 'twigExpression' ) {
                 editor.commands.get( 'insertTwigExpression' ).execute();
             }
         } );

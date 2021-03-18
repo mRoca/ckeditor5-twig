@@ -992,6 +992,13 @@
   dependencies:
     ckeditor5 "^26.0.0"
 
+"@ckeditor/ckeditor5-html-embed@^26.0.0":
+  version "26.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-html-embed/-/ckeditor5-html-embed-26.0.0.tgz#337b2b4c5c3dc673a601fcee88ee8883393224f2"
+  integrity sha512-vP7xJBevAUj4ZQ8RemnTkFIlfVV9PCVSSXs2XyqLbPFs8e7QjgTObss8y3IX0nTCtfGAzjT6VCEPaiFzcifz2g==
+  dependencies:
+    ckeditor5 "^26.0.0"
+
 "@ckeditor/ckeditor5-image@^26.0.0":
   version "26.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-image/-/ckeditor5-image-26.0.0.tgz#73a5e1e43bca74f8de246820fde5f16a86704a1b"
@@ -2019,10 +2026,9 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-ckeditor5-twig@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/ckeditor5-twig/-/ckeditor5-twig-0.0.3.tgz#8cc4f7efbaed203b616e8a17978d0fafa8a2fe3a"
-  integrity sha512-kH+Ue3byCAFeEGPw61YyuD1408Z2FaJn2n+6UHPghogWnAGRpmBx/GTjaXe7XqCe7RDB5srgJThMMcS0x5o0eA==
+ckeditor5-twig@mRoca/ckeditor5-twig#master:
+  version "0.0.5"
+  resolved "https://codeload.github.com/mRoca/ckeditor5-twig/tar.gz/8cfad9f3501169ccffe0947521b2bb5b56ec2626"
   dependencies:
     "@ckeditor/ckeditor5-core" "^26.0.0"
     "@ckeditor/ckeditor5-engine" "^26.0.0"

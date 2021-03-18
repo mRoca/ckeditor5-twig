@@ -33,6 +33,7 @@
     "@ckeditor/ckeditor5-editor-classic": "^26.0.0",
     "@ckeditor/ckeditor5-essentials": "^26.0.0",
     "@ckeditor/ckeditor5-heading": "^26.0.0",
+    "@ckeditor/ckeditor5-html-embed": "^26.0.0",
     "@ckeditor/ckeditor5-inspector": "^2.2.2",
     "@ckeditor/ckeditor5-list": "^26.0.0",
     "@ckeditor/ckeditor5-paragraph": "^26.0.0",

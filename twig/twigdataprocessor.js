@@ -21,6 +21,9 @@ export default class TwigDataProcessor {
 }
 
 function twig2html( content ) {
+    // Avoid parsing .raw-html-embed content: see https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html
+    content = encodeRawHtml( content );
+
     // Comments: {# $1 #}
     content = content.replace( /{#-?\s*((?:(?!\s*-?}}).)*)\s*-?#}/gs, ( match, content ) => twigComment( content ) );
 
@@ -42,6 +45,8 @@ function twig2html( content ) {
 
     // All other statements: {% $1 %}
     content = content.replace( /{%-?\s*((?:(?!\s*-?%}).)*)\s*-?%}/g, ( match, contents ) => twigStatementOpen( contents ) + twigStatementClose() );
+
+    content = decodeRawHtml( content );
 
     // TODO here we can find "else" parts by parsing the dom ("if" and "for")
 
@@ -120,12 +125,42 @@ function twig2html( content ) {
         return containerEl.outerHTML;
     }
 
+    function encodeRawHtml( content ) {
+        if ( content.indexOf( 'raw-html-embed' ) < 0 ) {
+            return content;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString( content, 'text/html' );
+
+        Array.from( doc.getElementsByClassName( 'raw-html-embed' ) ).forEach( el => {
+            el.innerHTML = utf8ToB64( el.innerHTML );
+        } );
+        return doc.body.innerHTML;
+    }
+
+    function decodeRawHtml( content ) {
+        if ( content.indexOf( 'raw-html-embed' ) < 0 ) {
+            return content;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString( content, 'text/html' );
+
+        Array.from( doc.getElementsByClassName( 'raw-html-embed' ) ).forEach( el => {
+            el.innerHTML = b64ToUtf8( el.innerHTML );
+        } );
+        return doc.body.innerHTML;
+    }
+
     return content;
 }
 
 function html2twig( content ) {
     const parser = new DOMParser();
     const doc = parser.parseFromString( content, 'text/html' );
+
+    // TODO Don't parse div.raw-html-embed content
 
     // Comments: {# $1 #}
     Array.from( doc.getElementsByClassName( 'twig-comment-container' ) ).forEach( el => {
@@ -170,4 +205,12 @@ function html2twig( content ) {
     }
 
     return doc.body.innerHTML;
+}
+
+function utf8ToB64( str ) {
+    return window.btoa( unescape( encodeURIComponent( str ) ) );
+}
+
+function b64ToUtf8( str ) {
+    return decodeURIComponent( escape( window.atob( str ) ) );
 }

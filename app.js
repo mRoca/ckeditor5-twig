@@ -18,11 +18,12 @@ import hljs from 'highlight.js';
 /* demo page style */
 import './demo.css';
 import 'highlight.js/styles/agate.css';
+import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 
 ClassicEditor
     .create( document.querySelector( '#editor' ), {
-        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, TwigPlugin ],
-        toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'twigCommands' ],
+        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, HtmlEmbed, TwigPlugin ],
+        toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'htmlEmbed', 'twigCommands' ],
         twig: {
             variables: window.availableVariables // Defined in the index.html file
         }

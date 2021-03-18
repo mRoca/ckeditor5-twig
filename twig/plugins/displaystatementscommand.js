@@ -1,6 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
-import htmlContent from './displaystatementscommand.html';
+import htmlContent from 'raw-loader!./displaystatementscommand.html';
 import first from '@ckeditor/ckeditor5-utils/src/first';
 
 export class DisplayTwigAvailableStatementsCommand extends Command {

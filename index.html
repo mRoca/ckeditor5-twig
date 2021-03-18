@@ -43,6 +43,16 @@
                 <p>Are you from {{ country.name }}?</p>
             {% endfor %}
         </div>
+
+<div class="raw-html-embed">
+<p>This is a "raw" embed html block, we can use it for all unsupported twig DOM construct</p>
+<ul>
+    {% for country in countries %}
+    <li>Are you from {{ country.name }}?</li>
+    {% endfor %}
+</ul>
+</div>
+
     </div>
 </div>
 

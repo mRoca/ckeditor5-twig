@@ -47,10 +47,6 @@ module.exports = {
                 test: /\.css$/i,
                 exclude: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
                 use: [ 'style-loader', 'css-loader' ]
-            },
-            {
-                test: /\.html$/i,
-                use: 'raw-loader'
             }
         ]
     },

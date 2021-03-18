@@ -103,9 +103,9 @@ export default class StatementEditing extends Plugin {
         conversion.for( 'editingDowncast' ).elementToElement( {
             model: 'twigStatement',
             view: ( modelElement, { writer: viewWriter } ) => {
-                const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-statement' } );
+                const div = viewWriter.createEditableElement( 'div', { class: 'twig-statement' } );
 
-                return toWidgetEditable( pre, viewWriter );
+                return toWidgetEditable( div, viewWriter );
             }
         } );
 

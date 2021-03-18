@@ -141,6 +141,9 @@ table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-ch
     line-height: 14px;
     margin-top: 6px;
 }
+.twig-statement-doc pre code {
+    padding: 0;
+}
 
 .twig-statement-doc button {
     border: 0;

@@ -93,9 +93,9 @@ export default class CommentEditing extends Plugin {
         conversion.for( 'editingDowncast' ).elementToElement( {
             model: 'twigComment',
             view: ( modelElement, { writer: viewWriter } ) => {
-                const pre = viewWriter.createEditableElement( 'pre', { class: 'twig-comment' } );
+                const div = viewWriter.createEditableElement( 'div', { class: 'twig-comment' } );
 
-                return toWidgetEditable( pre, viewWriter );
+                return toWidgetEditable( div, viewWriter );
             }
         } );
     }

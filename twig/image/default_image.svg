@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300px" height="200px" fill="white">
+    <rect width="100%" height="100%" fill="#aaa"/>
+    <text
+        x="50%"
+        y="50%"
+        dominant-baseline="middle"
+        text-anchor="middle"
+        lengthAdjust="spacingAndGlyphs"
+        textLength="220"
+        id="twig-src"
+    >IMG_URL</text>
+</svg>

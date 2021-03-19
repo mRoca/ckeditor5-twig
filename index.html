@@ -7,7 +7,7 @@
 <body>
 <div class="column">
     <h2>Such a wonderful WYSIWYG <3</h2>
-    <div id="editor">
+    <div id="editor" style="display: none;">
         {# This is an example of twig parsing.
         See the page source code in order to display the original twig template #}
 
@@ -16,7 +16,9 @@
         {% endmacro %}
 
         {% set username = 'John Doe' %}
-        <h1>Welcome {{ username }} :-)</h1>
+        <h1 class="username-{{ user.type }}">Welcome {{ user.name }} :-)</h1>
+
+        <img src="{{ asset_url(user.avatar) }}" alt="User avatar">
 
         <p>This is a CKEditor Twig template plugin demo.</p>
 

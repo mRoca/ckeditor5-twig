@@ -11,6 +11,8 @@ Features:
 - `{% tag %}` blocks
 - `{% tag %} with content {% endtag %}` blocks
 - `{# comments #}`
+- Don't parse the [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html) divs
+- Allow using variables into images src
 
 ## Usage
 
@@ -55,6 +57,25 @@ ClassicEditor
 ```
 
 Translations are currently available for `EN` and `FR` locales (see the `twig/twigpluginui.js` file).
+
+### Images
+
+The plugin brings an `Image` feature allowing to use twig expression as `src` value, e.g.: `"https://cdn.my.site/images/" ~ user.avatar`
+When using a twig expression as image `src`, a grey image is displayed with the `src` value on it.
+
+You must [install the Image plugin](https://ckeditor.com/docs/ckeditor5/latest/features/image.html)
+in order to use it with the Twig plugin:
+
+```bash
+yarn add @ckeditor/ckeditor5-image
+```
+```javascript
+import Image from '@ckeditor/ckeditor5-image/src/image';
+
+ClassicEditor.create( document.querySelector( '#editor' ), {
+    plugins: ['...', TwigPlugin, Image]
+});
+```
 
 ### Symfony integration
 

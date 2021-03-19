@@ -28,6 +28,10 @@ export default class TwigPluginUI extends Plugin {
             'twig.expression.insert': 'Insert the expression',
             'twig.expression.required': 'You must write something',
             'twig.statements.insert': 'Insert this statement',
+            'twig.image': 'Image',
+            'twig.image.label': 'The image url, as a twig string, e.g.: "https://cdn.my.site/images/" ~ user.picture\nThis value will be displayed as <img src="{{ value }}" />',
+            'twig.image.insert': 'Insert the image',
+            'twig.image.required': 'You must write something',
             'twig.variable.insert': 'Insert',
             'twig.variable.insert.tooltip': 'Insert a default sample if allowed at the cursor position',
             'twig.variables.empty': 'There is no available variables for this template.',
@@ -55,6 +59,10 @@ export default class TwigPluginUI extends Plugin {
             'twig.expression.insert': 'Insérer l\'expression',
             'twig.expression.required': 'Vous devez entrer une valeur',
             'twig.statements.insert': 'Insérer ce bloc',
+            'twig.image': 'Image',
+            'twig.image.label': 'L\'url de l\'image en tant que chaîne twig, exemple: "https://cdn.my.site/images/" ~ user.avatar\nCette valeur sera insérée comme ceci: <img src="{{ value }}" />',
+            'twig.image.insert': 'Insérer l\'image',
+            'twig.image.required': 'Vous devez entrer une valeur',
             'twig.variable.insert': 'Insérer',
             'twig.variable.insert.tooltip': 'Insérer un code par défaut au template si l\'élément est autorisé à la position du curseur',
             'twig.variables.empty': 'Aucune variable n\'est disponible pour ce template.',
@@ -109,6 +117,7 @@ export default class TwigPluginUI extends Plugin {
             listView.items.add( createDropdownButton( 'insertTwigExpression', 'twig.expression' ) );
             listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );
             listView.items.add( createDropdownButton( 'displayTwigStatements', 'twig.statement-with-content' ) );
+            listView.items.add( createDropdownButton( 'insertTwigImage', 'twig.image' ) );
 
             dropdownView.bind( 'isEnabled' ).toMany( listView.items, 'isEnabled',
                 ( ...areEnabled ) => areEnabled.some( isEnabled => isEnabled )

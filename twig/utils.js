@@ -37,3 +37,19 @@ export function addTranslationsIfNotExist( language, translations, getPluralForm
         languageTranslations.dictionary[ key ] = translations[ key ];
     } );
 }
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+export function utf8ToB64( str ) {
+    return window.btoa( unescape( encodeURIComponent( str ) ) );
+}
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+export function b64ToUtf8( str ) {
+    return decodeURIComponent( escape( window.atob( str ) ) );
+}

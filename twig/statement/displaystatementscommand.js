@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import htmlContent from 'raw-loader!./displaystatementscommand.html';
 import first from '@ckeditor/ckeditor5-utils/src/first';
 
-export class DisplayTwigAvailableStatementsCommand extends Command {
+export default class DisplayTwigAvailableStatementsCommand extends Command {
     execute() {
         const editor = this.editor;
         const t = editor.t;

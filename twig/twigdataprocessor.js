@@ -1,4 +1,6 @@
 import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
+import { b64ToUtf8, utf8ToB64 } from './utils';
+import { srcToSvgSrc, svgSrcPrefix, svgSrcToSrc } from './image/utils';
 
 export default class TwigDataProcessor {
     constructor( document ) {
@@ -24,6 +26,9 @@ function twig2html( content ) {
     // Avoid parsing .raw-html-embed content: see https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html
     content = encodeRawHtml( content );
 
+    // Encode attributes containing {{ }}
+    content = content.replace( /="((?:(?!").)*{{-?\s*(?:(?:(?!\s*-?}}).)*)\s*-?}}(?:(?!").)*)"/gs, ( match, content ) => twigAttribute( content ) );
+
     // Comments: {# $1 #}
     content = content.replace( /{#-?\s*((?:(?!\s*-?}}).)*)\s*-?#}/gs, ( match, content ) => twigComment( content ) );
 
@@ -46,6 +51,10 @@ function twig2html( content ) {
     // All other statements: {% $1 %}
     content = content.replace( /{%-?\s*((?:(?!\s*-?%}).)*)\s*-?%}/g, ( match, contents ) => twigStatementOpen( contents ) + twigStatementClose() );
 
+    // Transform images with src attribute containing {{ }}
+    content = transformImagesSrc( content );
+
+    // Decode the previously encoded raw html blocks
     content = decodeRawHtml( content );
 
     // TODO here we can find "else" parts by parsing the dom ("if" and "for")
@@ -111,6 +120,10 @@ function twig2html( content ) {
         return el.outerHTML;
     }
 
+    function twigAttribute( content ) {
+        return `="${ encodeURIComponent( content ) }"`;
+    }
+
     function twigComment( content ) {
         content = content.trim();
 
@@ -153,14 +166,28 @@ function twig2html( content ) {
         return doc.body.innerHTML;
     }
 
+    function transformImagesSrc( content ) {
+        if ( content.indexOf( 'src="' ) < 0 ) {
+            return content;
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString( content, 'text/html' );
+
+        // The attribute has been encoded by the twigAttribute function
+        const encodedExpr = encodeURIComponent( '{{' );
+        Array.from( doc.querySelectorAll( `img[src*="${ encodedExpr }"]` ) ).forEach( el => {
+            el.setAttribute( 'src', srcToSvgSrc( decodeURIComponent( el.getAttribute( 'src' ) ) ) );
+        } );
+        return doc.body.innerHTML;
+    }
+
     return content;
 }
 
 function html2twig( content ) {
     const parser = new DOMParser();
     const doc = parser.parseFromString( content, 'text/html' );
-
-    // TODO Don't parse div.raw-html-embed content
 
     // Comments: {# $1 #}
     Array.from( doc.getElementsByClassName( 'twig-comment-container' ) ).forEach( el => {
@@ -204,13 +231,13 @@ function html2twig( content ) {
         }( el ) );
     }
 
+    // Images with twig src
+    Array.from( doc.querySelectorAll( `img[src^="${ svgSrcPrefix }"]` ) ).forEach( el => {
+        const src = svgSrcToSrc( el.getAttribute( 'src' ) );
+        if ( src ) {
+            el.setAttribute( 'src', src );
+        }
+    } );
+
     return doc.body.innerHTML;
-}
-
-function utf8ToB64( str ) {
-    return window.btoa( unescape( encodeURIComponent( str ) ) );
-}
-
-function b64ToUtf8( str ) {
-    return decodeURIComponent( escape( window.atob( str ) ) );
 }

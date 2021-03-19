@@ -2,7 +2,7 @@ import Command from '@ckeditor/ckeditor5-core/src/command';
 import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget';
 import first from '@ckeditor/ckeditor5-utils/src/first';
 
-export class InsertTwigCommentCommand extends Command {
+export default class InsertTwigCommentCommand extends Command {
     execute() {
         const insertPosition = findOptimalInsertionPosition( this.editor.model.document.selection, this.editor.model );
 

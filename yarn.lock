@@ -346,6 +346,14 @@
   dependencies:
     ckeditor5 "^26.0.0"
 
+"@ckeditor/ckeditor5-image@^26.0.0":
+  version "26.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-image/-/ckeditor5-image-26.0.0.tgz#73a5e1e43bca74f8de246820fde5f16a86704a1b"
+  integrity sha512-l1+xjAMadj/e8g09s8T5UocLJVj/vSBitwHhNScGYfGexw3C1xaxNj18AFAN4804p9dgxxNTHph3b6tfpoULpA==
+  dependencies:
+    "@ckeditor/ckeditor5-ui" "^26.0.0"
+    ckeditor5 "^26.0.0"
+
 "@ckeditor/ckeditor5-indent@^26.0.0":
   version "26.0.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-indent/-/ckeditor5-indent-26.0.0.tgz#1892f5bbd53e9f45f3062a8dcaffb7eb3bd95459"

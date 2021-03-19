@@ -4,7 +4,7 @@ import { ButtonView } from '@ckeditor/ckeditor5-ui';
 
 export const variablesTypes = [ 'object', 'array', 'string', 'boolean', 'bool', 'integer', 'int', 'float', 'datetime', 'unknown' ];
 
-export class DisplayTwigVariablesCommand extends Command {
+export default class DisplayTwigVariablesCommand extends Command {
     execute() {
         const t = this.editor.t;
         const variables = this.editor.config.get( 'twig.variables' );

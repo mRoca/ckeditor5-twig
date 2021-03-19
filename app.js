@@ -5,6 +5,9 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 
 /* twig plugin files */
 import TwigPlugin from './twig/twigplugin';
@@ -18,11 +21,10 @@ import hljs from 'highlight.js';
 /* demo page style */
 import './demo.css';
 import 'highlight.js/styles/agate.css';
-import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 
 ClassicEditor
     .create( document.querySelector( '#editor' ), {
-        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, HtmlEmbed, TwigPlugin ],
+        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, Image, ImageResize, HtmlEmbed, TwigPlugin ],
         toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'htmlEmbed', 'twigCommands' ],
         twig: {
             variables: window.availableVariables // Defined in the index.html file

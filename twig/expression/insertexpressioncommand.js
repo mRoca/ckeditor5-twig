@@ -1,7 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
 
-export class InsertTwigExpressionCommand extends Command {
+export default class InsertTwigExpressionCommand extends Command {
     async execute( value ) {
         const editor = this.editor;
 

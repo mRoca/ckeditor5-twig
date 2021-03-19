@@ -1,3 +1,5 @@
+<!-- This file content is copied into the `image/utils.js file and used as a string -->
+<!-- We keep it here in order to easily have a preview of it -->
 <svg xmlns="http://www.w3.org/2000/svg" width="300px" height="200px" fill="white">
     <rect width="100%" height="100%" fill="#aaa"/>
     <text

@@ -1,7 +1,9 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
-import htmlContent from 'raw-loader!./displaystatementscommand.html';
 import first from '@ckeditor/ckeditor5-utils/src/first';
+// If the htmlContent is not well loaded when using this lib from node_modules,
+// it's because of a webpack bad configuration when importing html files
+import htmlContent from 'raw-loader!./displaystatementscommand.html';
 
 export default class DisplayTwigAvailableStatementsCommand extends Command {
     execute() {

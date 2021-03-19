@@ -16,6 +16,8 @@ Features:
 
 ## Usage
 
+[Install CKEditor5](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/advanced-setup.html#scenario-2-building-from-source).
+
 You must use the same major CKEditor version as the one supported by this plugin (see the `package.json` file).
 If you get a `ckeditor-duplicated-modules` error, you have mismatching versions.
 

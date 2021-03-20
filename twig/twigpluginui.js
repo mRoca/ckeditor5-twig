@@ -45,7 +45,10 @@ export default class TwigPluginUI extends Plugin {
             'twig.variables.type.integer': 'Integer',
             'twig.variables.type.float': 'Float',
             'twig.variables.type.datetime': 'Datetime',
-            'twig.variables.type.unknown': 'Unknown'
+            'twig.variables.type.unknown': 'Unknown',
+            'twig.import-export': 'Import / Export',
+            'twig.import': 'Import',
+            'twig.import.label': 'You can import your own twig/html content by pasting it bellow.\nCaution: if the pasted template is not valid, you can break the output.'
         } );
 
         addTranslationsIfNotExist( 'fr', {
@@ -76,7 +79,10 @@ export default class TwigPluginUI extends Plugin {
             'twig.variables.type.integer': 'Nombre entier',
             'twig.variables.type.float': 'Nombre à virgule',
             'twig.variables.type.datetime': 'Date et heure',
-            'twig.variables.type.unknown': 'Inconnu'
+            'twig.variables.type.unknown': 'Inconnu',
+            'twig.import-export': 'Import / Export',
+            'twig.import': 'Importer',
+            'twig.import.label': 'Vous pouvez importer votre propre twig/html en le collant ci-dessous.\nAttention: un template non valide peut entraîner la perte de données.'
         } );
     }
 
@@ -118,6 +124,7 @@ export default class TwigPluginUI extends Plugin {
             listView.items.add( createDropdownButton( 'insertTwigStatement', 'twig.statement' ) );
             listView.items.add( createDropdownButton( 'displayTwigStatements', 'twig.statement-with-content' ) );
             listView.items.add( createDropdownButton( 'insertTwigImage', 'twig.image' ) );
+            listView.items.add( createDropdownButton( 'displayImportExport', 'twig.import-export' ) );
 
             dropdownView.bind( 'isEnabled' ).toMany( listView.items, 'isEnabled',
                 ( ...areEnabled ) => areEnabled.some( isEnabled => isEnabled )

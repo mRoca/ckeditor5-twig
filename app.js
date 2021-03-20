@@ -8,6 +8,7 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
 
 /* twig plugin files */
 import TwigPlugin from './twig/twigplugin';
@@ -24,8 +25,13 @@ import 'highlight.js/styles/agate.css';
 
 ClassicEditor
     .create( document.querySelector( '#editor' ), {
-        plugins: [ Essentials, Paragraph, Heading, List, Bold, Italic, Image, ImageResize, HtmlEmbed, TwigPlugin ],
+        plugins: [ Autosave, Essentials, Paragraph, Heading, List, Bold, Italic, Image, ImageResize, HtmlEmbed, TwigPlugin ],
         toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'htmlEmbed', 'twigCommands' ],
+        autosave: {
+            save( editor ) {
+                return window.displaySource( editor );
+            }
+        },
         twig: {
             variables: window.availableVariables // Defined in the index.html file
         }
@@ -41,16 +47,12 @@ ClassicEditor
         console.error( error.stack );
     } );
 
-window.displaySource = function() {
+window.displaySource = function( editor ) {
     prettydiff.options.mode = 'beautify';
     prettydiff.options.language = 'twig';
     prettydiff.options.force_indent = true;
-    prettydiff.options.source = window.editor.getData();
+    prettydiff.options.source = editor.getData();
 
     document.getElementById( 'output' ).innerText = prettydiff();
     hljs.highlightBlock( document.getElementById( 'output' ) );
 };
-
-document.addEventListener( 'DOMContentLoaded', () => {
-    window.displaySource();
-} );

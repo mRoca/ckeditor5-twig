@@ -159,3 +159,10 @@ table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-ch
 .twig-statement-doc button:hover {
     background-color: #448acb;
 }
+
+/* ==================== */
+/* Import export modale */
+textarea.twig-import {
+    font-size: 11px;
+    min-height: 200px;
+}

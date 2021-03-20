@@ -230,5 +230,3 @@ vendor/bin/php-cs-fixer fix
 - Deal with inline & `li` statements
 - Allow passing available functions & filters into the variables list
 - Validate the twig template with [twig.js](https://github.com/twigjs/twig.js)
-- Add the [auto reload plugin](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/saving-data.html)
-  to the demo page

@@ -9,6 +9,7 @@ import InsertTwigCommentCommand from './comment/insertcommentcommand';
 import DisplayTwigVariablesCommand from './variables/displayvariablescommand';
 import DisplayTwigAvailableStatementsCommand from './statement/displaystatementscommand';
 import InsertTwigImageCommand from './image/insertimagecommand';
+import ImportCommand from './importexport/importcommand';
 
 export default class TwigPluginEditing extends Plugin {
     static get requires() {
@@ -22,5 +23,6 @@ export default class TwigPluginEditing extends Plugin {
         this.editor.commands.add( 'insertTwigStatement', new InsertTwigStatementCommand( this.editor ) );
         this.editor.commands.add( 'displayTwigStatements', new DisplayTwigAvailableStatementsCommand( this.editor ) );
         this.editor.commands.add( 'insertTwigImage', new InsertTwigImageCommand( this.editor ) );
+        this.editor.commands.add( 'displayImportExport', new ImportCommand( this.editor ) );
     }
 }

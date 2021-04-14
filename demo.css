@@ -2,7 +2,9 @@ body > .column {
     width: 50%;
     margin: 0;
     float: left;
+    padding: 4px;
     padding-bottom: 50px;
+    box-sizing: border-box;
 }
 
 #output-container {

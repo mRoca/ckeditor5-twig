@@ -13,6 +13,7 @@ Features:
 - `{# comments #}`
 - Don't parse the [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html) divs
 - Allow using variables into images src
+- Import / Export html code button
 
 ## Usage
 

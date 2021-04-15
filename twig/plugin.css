@@ -58,7 +58,8 @@
     margin: 0;
     padding: 6px !important;
 }
-.twig-variables-example pre code, .twig-statement-doc code {
+
+.twig-variables-example pre code, .twig-statement-doc pre code {
     padding: 0;
 }
 

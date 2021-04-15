@@ -46,6 +46,7 @@ export default class InsertTwigImageCommand extends Command {
             inputLabel: t( 'twig.image.label' ),
             inputValue: currentValue || '',
             showCancelButton: true,
+            cancelButtonText: t( 'twig.cancel' ),
             confirmButtonText: t( 'twig.image.insert' ),
             inputValidator: value => {
                 if ( !value.trim() ) {

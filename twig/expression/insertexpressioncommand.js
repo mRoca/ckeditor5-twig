@@ -41,7 +41,8 @@ export default class InsertTwigExpressionCommand extends Command {
             inputLabel: t( 'twig.expression.label' ),
             inputValue: currentValue || '',
             showCancelButton: true,
-            confirmButtonText: t( 'twig.expression.insert' ),
+            cancelButtonText: t( 'twig.cancel' ),
+            confirmButtonText: currentValue ? t( 'twig.expression.update' ) : t( 'twig.expression.insert' ),
             inputValidator: value => {
                 if ( !value.trim() ) {
                     return t( 'twig.expression.required' );

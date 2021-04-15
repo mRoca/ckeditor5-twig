@@ -13,6 +13,8 @@ export default class DisplayTwigVariablesCommand extends Command {
             Swal.fire( {
                 title: t( 'twig.variables' ),
                 width: '80%',
+                showConfirmButton: false,
+                showCloseButton: true,
                 html: this._getTableElement( variables ),
                 footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
             } );
@@ -26,11 +28,15 @@ export default class DisplayTwigVariablesCommand extends Command {
     _getTableElement( vars ) {
         const hash = JSON.stringify( vars );
 
-        if ( this._cachedTables && this._cachedTables[ hash ] ) {
-            return this._cachedTables[ hash ];
+        if ( !this._cachedTables ) {
+            this._cachedTables = {};
         }
 
-        return this._createVariablesTable( vars );
+        if ( !this._cachedTables[ hash ] ) {
+            this._cachedTables[ hash ] = this._createVariablesTable( vars );
+        }
+
+        return this._cachedTables[ hash ];
     }
 
     _createVariablesTable( vars, parents = [] ) {
@@ -184,7 +190,7 @@ export default class DisplayTwigVariablesCommand extends Command {
         const t = editor.t;
 
         const view = new ButtonView();
-        const commandArgs = this._getCommandByType( name, conf );
+        const commandArgs = this._getCommandByType( ( conf._parentName || '' ) + name, conf );
         if ( !commandArgs || !commandArgs.length ) {
             return undefined;
         }

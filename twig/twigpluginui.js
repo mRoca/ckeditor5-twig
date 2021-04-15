@@ -18,6 +18,7 @@ export default class TwigPluginUI extends Plugin {
 
     _addTranslations() {
         addTranslationsIfNotExist( 'en', {
+            'twig.cancel': 'Cancel',
             'twig.commands': 'Twig commands',
             'twig.variables': 'Variables list',
             'twig.statement': 'Tag',
@@ -26,6 +27,7 @@ export default class TwigPluginUI extends Plugin {
             'twig.expression': 'Variable',
             'twig.expression.label': 'Expression, e.g.: myVar|filter',
             'twig.expression.insert': 'Insert the expression',
+            'twig.expression.update': 'Update the expression',
             'twig.expression.required': 'You must write something',
             'twig.statements.insert': 'Insert this statement',
             'twig.image': 'Image',
@@ -52,6 +54,7 @@ export default class TwigPluginUI extends Plugin {
         } );
 
         addTranslationsIfNotExist( 'fr', {
+            'twig.cancel': 'Annuler',
             'twig.commands': 'Commandes Twig',
             'twig.variables': 'Liste des variables',
             'twig.statement': 'Instruction',

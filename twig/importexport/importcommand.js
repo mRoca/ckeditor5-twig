@@ -15,6 +15,7 @@ export default class ImportCommand extends Command {
                 inputLabel: t( 'twig.import.label' ),
                 inputValue: this._formatOutput( editor.getData() ) || '',
                 showCancelButton: true,
+                cancelButtonText: t( 'twig.cancel' ),
                 confirmButtonText: t( 'twig.import' ),
                 customClass: {
                     input: 'twig-import'

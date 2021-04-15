@@ -58,6 +58,9 @@
     margin: 0;
     padding: 6px !important;
 }
+.twig-variables-example pre code, .twig-statement-doc code {
+    padding: 0;
+}
 
 .twig-variables-example a, .twig-statement-doc a {
     text-decoration: none;
@@ -114,6 +117,12 @@ table.twig-variables thead th:nth-child(3), table.twig-variables tbody td:nth-ch
 table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-child(4) {
     width: 140px;
     text-align: center;
+}
+
+table.twig-variables button.ck-button {
+    background: #888;
+    color: white;
+    font-weight: bold;
 }
 
 /* ================= */

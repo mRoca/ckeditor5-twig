@@ -179,7 +179,7 @@ class TwigVariablesExtractor
         $nullable = (bool) array_reduce($infoTypes, static fn (bool $carry, Type $cur) => $carry && $cur->isNullable(), true);
 
         // Array
-        $isCollection = (bool) array_reduce($infoTypes, static fn (bool $carry, Type $cur) => $carry && $cur->isCollection(), true);
+        $isCollection = (bool) array_reduce($infoTypes, static fn (bool $carry, Type $cur) => $carry && self::isCollection($cur), true);
         if ($isCollection) {
             // We ignore the collection key type for now, maybe later ?
             /** @var Type|null $valueType The first not null collection items type */
@@ -213,5 +213,28 @@ class TwigVariablesExtractor
         }
 
         return new TwigVariable(TwigVariable::TYPE_UNKNOWN, null, $nullable);
+    }
+
+    private static function isCollection(Type $cur): bool
+    {
+        if ($cur->isCollection()) {
+            return true;
+        }
+
+        if (null === $className = $cur->getClassName()) {
+            return false;
+        }
+
+        if (is_iterable($className) || 'iterator' === $className) {
+            return true;
+        }
+
+        try {
+            $reflection = new \ReflectionClass($className);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
+
+        return $reflection->isIterable() || $reflection->implementsInterface('Traversable');
     }
 }

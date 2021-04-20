@@ -38,8 +38,8 @@ class TwigVariablesExtractor
     }
 
     /**
-     * @param array|object $items
-     * @param array        $context ['serializer_groups' => ['foo']]
+     * @param array|mixed|object $items
+     * @param array              $context ['serializer_groups' => ['foo']]
      *
      * @return TwigVariable[]
      */
@@ -225,7 +225,7 @@ class TwigVariablesExtractor
             return false;
         }
 
-        if (is_iterable($className) || 'iterator' === $className) {
+        if ('iterator' === $className) {
             return true;
         }
 

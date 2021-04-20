@@ -231,3 +231,8 @@ vendor/bin/php-cs-fixer fix
 - Deal with inline & `li` statements
 - Allow passing available functions & filters into the variables list
 - Validate the twig template with [twig.js](https://github.com/twigjs/twig.js)
+
+**DataExtractor**
+
+- object with `__toString` => `object|string`
+- object => display the class name

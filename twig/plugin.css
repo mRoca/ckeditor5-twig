@@ -106,24 +106,31 @@ table.twig-variables tbody td[colspan] {
 
 /* Type column */
 table.twig-variables thead th:nth-child(2), table.twig-variables tbody td:nth-child(2) {
-    width: 10rem;
+    width: 8rem;
 }
 
 /* Description column */
 table.twig-variables thead th:nth-child(3), table.twig-variables tbody td:nth-child(3) {
-    width: 50rem;
+    width: 40rem;
 }
 
 /* Button column */
 table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-child(4) {
-    width: 140px;
+    width: 110px;
     text-align: center;
 }
 
-table.twig-variables button.ck-button {
+.twig-variables button {
     background: #888;
     color: white;
     font-weight: bold;
+    padding: 5px 10px;
+    white-space: nowrap;
+    cursor: default;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1;
+    border: 1px solid transparent;
 }
 
 /* ================= */

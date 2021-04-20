@@ -1,13 +1,15 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Swal from 'sweetalert2';
-import { ButtonView } from '@ckeditor/ckeditor5-ui';
 
 export const variablesTypes = [ 'object', 'array', 'string', 'boolean', 'bool', 'integer', 'int', 'float', 'datetime', 'unknown' ];
+const displayDocumentationLinks = false; // TODO Get it from the config
 
 export default class DisplayTwigVariablesCommand extends Command {
     execute() {
         const t = this.editor.t;
         const variables = this.editor.config.get( 'twig.variables' );
+        const contentEl = this._getTableElement( variables );
+        contentEl.style.display = 'none';
 
         this.editor.model.change( () => {
             Swal.fire( {
@@ -15,7 +17,14 @@ export default class DisplayTwigVariablesCommand extends Command {
                 width: '80%',
                 showConfirmButton: false,
                 showCloseButton: true,
-                html: this._getTableElement( variables ),
+                html: contentEl,
+                didOpen: () => {
+                    Swal.showLoading();
+                    setTimeout( () => {
+                        contentEl.style.display = 'block';
+                        Swal.hideLoading();
+                    } );
+                },
                 footer: 'Twig documentation:&nbsp;<a href="https://twig.symfony.com/doc/3.x/" target="_blank">https://twig.symfony.com<a>'
             } );
         } );
@@ -188,8 +197,6 @@ export default class DisplayTwigVariablesCommand extends Command {
     _renderInsertButton( name, conf ) {
         const editor = this.editor;
         const t = editor.t;
-
-        const view = new ButtonView();
         const commandArgs = this._getCommandByType( ( conf._parentName || '' ) + name, conf );
         if ( !commandArgs || !commandArgs.length ) {
             return undefined;
@@ -197,22 +204,16 @@ export default class DisplayTwigVariablesCommand extends Command {
 
         const commandName = commandArgs.shift();
 
-        view.set( {
-            label: t( 'twig.variable.insert' ),
-            tooltip: t( 'twig.variable.insert.tooltip' ),
-            withText: true
-        } );
-
-        const command = editor.commands.get( commandName );
-        view.bind( 'isEnabled' ).to( command, 'isEnabled' );
-        view.on( 'execute', () => {
+        const btn = document.createElement( 'button' );
+        btn.innerText = t( 'twig.variable.insert' );
+        btn.title = t( 'twig.variable.insert.tooltip' );
+        btn.onclick = () => {
             editor.execute( commandName, ...commandArgs );
             editor.editing.view.focus();
             Swal.close();
-        } );
+        };
 
-        view.render();
-        return view.element;
+        return btn;
     }
 
     _getCommandByType( name, conf ) {
@@ -323,7 +324,7 @@ Total: {{ ${ name }|length }}
             output.append( preEl );
         }
 
-        if ( linkEl.href ) {
+        if ( displayDocumentationLinks && linkEl.href ) {
             linkEl.target = '_blank';
             linkEl.innerText = linkEl.href;
             output.append( linkEl );

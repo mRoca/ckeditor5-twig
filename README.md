@@ -11,7 +11,7 @@ Features:
 - `{% tag %}` blocks
 - `{% tag %} with content {% endtag %}` blocks
 - `{# comments #}`
-- Don't parse the [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html) divs
+- Compatible with [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html) if using `<raw-html-embed>` tags instead of divs
 - Allow using variables into images src
 - Import / Export html code button
 
@@ -25,6 +25,16 @@ If you get a `ckeditor-duplicated-modules` error, you have mismatching versions.
 ```bash
 yarn add ckeditor5-twig
 ```
+
+```html
+<textarea id="editor" style="display: none;">
+    <h1>My template</h1>
+    {% block twig-template %}
+        ...
+    {% endblock %}
+</textarea>
+```
+> Note: you should use a <textarea>, or a <script type="text/template"> tags instead of a <div> one in order to avoid your browser parsing it.
 
 ```javascript
 import TwigPlugin from 'ckeditor5-twig/twig/twigplugin';

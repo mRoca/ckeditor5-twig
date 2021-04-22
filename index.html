@@ -7,16 +7,16 @@
 <body>
 <div class="column">
     <h2>Such a wonderful WYSIWYG <3</h2>
-    <div id="editor" style="display: none;">
+    <textarea id="editor" style="display: none;">
         {# This is an example of twig parsing.
-        See the page source code in order to display the original twig template #}
+        See the page <source code> in order to display the original twig template #}
 
         {% macro sayHello(name) %}
-            Hello {{name}}
+            Hello {{ age > 18 ? 'sir' : firstname }}
         {% endmacro %}
 
-        {% set username = 'John Doe' %}
-        <h1 class="username-{{ user.type }}">Welcome {{ user.name }} :-)</h1>
+        {% set username = user.name|default('John Doe') %}
+        <h1 class="username-{{ user.type }}">Welcome {{ username }} :-)</h1>
 
         <img src="{{ asset_url(user.avatar) }}" alt="User avatar">
 
@@ -35,27 +35,27 @@
                     {% else %}
                     {{ sayHello(planet) }}
                     {% endif %}
-                    {% if isNotSoFar(galaxy) %} :-) {% else %} :-( {% endif %}
+                    {% if size(galaxy) > size(ourGalaxy) %} :-) {% else %} :-( {% endif %}
                 </p>
             {%- endif %}
         {% endblock %}
 
         <div>
             {% for country in countries %}
-                <p>Are you from {{ country.name }}?</p>
+                <p>&gt;&gt; Are you from {{ country.name }}?</p>
             {% endfor %}
         </div>
 
-<div class="raw-html-embed">
+<raw-html-embed>
 <p>This is a "raw" embed html block, we can use it for all unsupported twig DOM construct</p>
 <ul>
     {% for country in countries %}
     <li>Are you from {{ country.name }}?</li>
     {% endfor %}
 </ul>
-</div>
+</raw-html-embed>
 
-    </div>
+    </textarea>
 </div>
 
 <div class="column">

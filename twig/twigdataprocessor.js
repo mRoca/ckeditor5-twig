@@ -24,7 +24,9 @@ export default class TwigDataProcessor {
 
 function twig2html( content ) {
     // Avoid parsing .raw-html-embed content: see https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html
-    content = encodeRawHtml( content );
+    // We cannot use <div class="raw-html-embed"> in a twig template, as it's not possible to parse it.
+    // We use a custom <raw-html-embed> tag instead
+    content = content.replace( /<raw-html-embed>((?:(?!<\/raw-html-embed>).)*)<\/raw-html-embed>/gs, ( match, blockContent ) => '<raw-html-embed>' + utf8ToB64( blockContent ) + '</raw-html-embed>' );
 
     // Encode attributes containing {{ }}
     content = content.replace( /="((?:(?!").)*{{-?\s*(?:(?:(?!\s*-?}}).)*)\s*-?}}(?:(?!").)*)"/gs, ( match, content ) => twigAttribute( content ) );
@@ -54,8 +56,8 @@ function twig2html( content ) {
     // Transform images with src attribute containing {{ }}
     content = transformImagesSrc( content );
 
-    // Decode the previously encoded raw html blocks
-    content = decodeRawHtml( content );
+    // Decode the previously encoded raw html blocks and replace <raw-html-embed> by <div>
+    content = content.replace( /<raw-html-embed>((?:(?!<\/raw-html-embed>).)*)<\/raw-html-embed>/gs, ( match, blockContent ) => '<div class="raw-html-embed">' + b64ToUtf8( blockContent ) + '</div>' );
 
     // TODO here we can find "else" parts by parsing the dom ("if" and "for")
 
@@ -138,34 +140,6 @@ function twig2html( content ) {
         return containerEl.outerHTML;
     }
 
-    function encodeRawHtml( content ) {
-        if ( content.indexOf( 'raw-html-embed' ) < 0 ) {
-            return content;
-        }
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString( content, 'text/html' );
-
-        Array.from( doc.getElementsByClassName( 'raw-html-embed' ) ).forEach( el => {
-            el.innerHTML = utf8ToB64( el.innerHTML );
-        } );
-        return doc.body.innerHTML;
-    }
-
-    function decodeRawHtml( content ) {
-        if ( content.indexOf( 'raw-html-embed' ) < 0 ) {
-            return content;
-        }
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString( content, 'text/html' );
-
-        Array.from( doc.getElementsByClassName( 'raw-html-embed' ) ).forEach( el => {
-            el.innerHTML = b64ToUtf8( el.innerHTML );
-        } );
-        return doc.body.innerHTML;
-    }
-
     function transformImagesSrc( content ) {
         if ( content.indexOf( 'src="' ) < 0 ) {
             return content;
@@ -185,9 +159,21 @@ function twig2html( content ) {
     return content;
 }
 
+function htmlDecode( input ) {
+    const doc = new DOMParser().parseFromString( input, 'text/html' );
+    return doc.documentElement.textContent;
+}
+
 function html2twig( content ) {
     const parser = new DOMParser();
     const doc = parser.parseFromString( content, 'text/html' );
+
+    // html-embed divs
+    Array.from( doc.getElementsByClassName( 'raw-html-embed' ) ).forEach( el => {
+        const newEl = document.createElement( 'raw-html-embed' );
+        newEl.innerHTML = el.innerHTML;
+        el.outerHTML = newEl.outerHTML;
+    } );
 
     // Comments: {# $1 #}
     Array.from( doc.getElementsByClassName( 'twig-comment-container' ) ).forEach( el => {
@@ -195,13 +181,16 @@ function html2twig( content ) {
         if ( !commentEl ) {
             return;
         }
-        const comment = commentEl.textContent.trim();
-        el.parentNode.replaceChild( document.createTextNode( `{# ${ comment } #}` ), el );
+        const newEl = document.createElement( 'twig-string' );
+        newEl.textContent = `{# ${ commentEl.textContent.trim() } #}`;
+        el.parentNode.replaceChild( newEl, el );
     } );
 
     // Expressions: {{ $1 }}
     Array.from( doc.getElementsByClassName( 'twig-expression' ) ).forEach( el => {
-        el.parentNode.replaceChild( document.createTextNode( `{{ ${ el.innerHTML } }}` ), el );
+        const newEl = document.createElement( 'twig-string' );
+        newEl.textContent = `{{ ${ el.textContent.trim() } }}`;
+        el.parentNode.replaceChild( newEl, el );
     } );
 
     // Statements: {% $1 %}
@@ -218,7 +207,9 @@ function html2twig( content ) {
             const statement = statementEl.textContent.trim();
             const content = Array.from( el.children ).filter( child => child.classList.contains( 'twig-statement-content' ) )[ 0 ];
             if ( !content ) {
-                parentEl.replaceChild( document.createTextNode( `{% ${ statement } %}` ), el );
+                const openStatementEl = document.createElement( 'twig-string' );
+                openStatementEl.textContent = `{% ${ statement } %}`;
+                parentEl.replaceChild( openStatementEl, el );
                 return;
             }
 
@@ -227,7 +218,7 @@ function html2twig( content ) {
             const contentEl = document.createElement( 'div' );
             contentEl.innerHTML = '<!--TEMP_PLACEHOLDER-->';
             parentEl.replaceChild( contentEl, el );
-            parentEl.innerHTML = parentEl.innerHTML.replace( '<div><!--TEMP_PLACEHOLDER--></div>', `{% ${ statement } %}${ content.innerHTML }{% end${ tag } %}` );
+            parentEl.innerHTML = parentEl.innerHTML.replace( '<div><!--TEMP_PLACEHOLDER--></div>', `<twig-string>{% ${ statement } %}</twig-string>${ content.innerHTML }<twig-string>{% end${ tag } %}</twig-string>` );
         }( el ) );
     }
 
@@ -239,5 +230,10 @@ function html2twig( content ) {
         }
     } );
 
-    return doc.body.innerHTML;
+    content = doc.body.innerHTML;
+
+    // We use custom tags in order to unescape twig strings
+    content = content.replace( /<twig-string>((?:(?!<\/twig-string>).)*)<\/twig-string>/gs, ( match, blockContent ) => htmlDecode( blockContent ) );
+
+    return content;
 }

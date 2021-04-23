@@ -8,6 +8,19 @@
 <div class="column">
     <h2>Such a wonderful WYSIWYG <3</h2>
     <textarea id="editor" style="display: none;">
+        {# *** Ce modèle est conçu pour être publié en format A3 et en paysage. Il doit être généré à partir d'une célébration de mariage. *** #}
+<body>
+{% for personne in personnes %}
+	{% if personne.sexe == 'M' %}
+		{% for sacrement in personne.sacrements %}
+			{% if sacrement.type == 'mariage' %}
+
+<main>
+	<table width="100%" align="center" border="0px"  valign="top">
+        <tr>
+{# Page 4 du dossier #}
+			<td width="47%" valign="top">
+
         {# This is an example of twig parsing.
         See the page <source code> in order to display the original twig template #}
 
@@ -18,6 +31,7 @@
         {% set username = user.name|default('John Doe') %}
         <h1 class="username-{{ user.type }}">Welcome {{ username }} :-)</h1>
 
+        {# This image has a dynamic src #}
         <img src="{{ asset_url(user.avatar) }}" alt="User avatar">
 
         <p>This is a CKEditor Twig template plugin demo.</p>
@@ -121,6 +135,6 @@
         }
     };
 </script>
-<script src="bundle.js?t=1619175933"></script>
+<script src="bundle.js?t=1619178771"></script>
 </body>
 </html>

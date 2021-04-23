@@ -46,15 +46,24 @@
             {% endfor %}
         </div>
 
-<raw-html-embed>
-<p>This is a "raw" embed html block, we can use it for all unsupported twig DOM construct</p>
+<code-language-twig>
+<p>This is a Twig "code" block, we can use it for all unsupported twig commandes</p>
+
+<html>{{ a > b ? 'a is greater than b' : '' }}</html>
+
 <ul>
     {% for country in countries %}
     <li>Are you from {{ country.name }}?</li>
     {% endfor %}
 </ul>
-</raw-html-embed>
+</code-language-twig>
 
+<raw-html-embed>
+<p>This is a "raw" embed html block, we can use it for all unsupported twig DOM construct</p>
+<p>This is nice, but as the html embed plugin parses the content, we cannot write everything we want</p>
+
+{{ See the README for more info, and use the Code Blocks plugin instead }}
+</raw-html-embed>
     </textarea>
 </div>
 
@@ -112,6 +121,6 @@
         }
     };
 </script>
-<script src="bundle.js?t=1619133258"></script>
+<script src="bundle.js?t=1619175909"></script>
 </body>
 </html>

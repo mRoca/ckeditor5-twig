@@ -53,3 +53,22 @@ export function utf8ToB64( str ) {
 export function b64ToUtf8( str ) {
     return decodeURIComponent( escape( window.atob( str ) ) );
 }
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+export function htmlDecode( str ) {
+    const doc = new DOMParser().parseFromString( str, 'text/html' );
+    return doc.documentElement.textContent;
+}
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+export function htmlEncode( str ) {
+    const el = document.createElement( 'div' );
+    el.innerText = str;
+    return el.innerHTML.replace( /<br>/gi, '\n' );
+}

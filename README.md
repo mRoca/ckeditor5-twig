@@ -11,7 +11,7 @@ Features:
 - `{% tag %}` blocks
 - `{% tag %} with content {% endtag %}` blocks
 - `{# comments #}`
-- Compatible with [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html) if using `<raw-html-embed>` tags instead of divs
+- Raw Twig content with [Code blocks](https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html)
 - Allow using variables into images src
 - Import / Export html code button
 
@@ -34,7 +34,7 @@ yarn add ckeditor5-twig
     {% endblock %}
 </textarea>
 ```
-> Note: you should use a <textarea>, or a <script type="text/template"> tags instead of a <div> one in order to avoid your browser parsing it.
+> Note: you should use a `<textarea>`, or a `<script type="text/template">` tags instead of a `<div>` one in order to avoid your browser parsing it.
 
 ```javascript
 import TwigPlugin from 'ckeditor5-twig/twig/twigplugin';
@@ -89,6 +89,38 @@ ClassicEditor.create( document.querySelector( '#editor' ), {
     plugins: ['...', TwigPlugin, Image]
 });
 ```
+
+### Raw twig content
+
+If you need to write your own twig code, you can use the [Code blocks](https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html) plugin.
+The required config is described bellow. Behind the woods, the twig plugin will replace all `<pre><code class="language-twig">` tags by `<code-language-twig>`.
+
+```javascript
+import TwigPlugin from 'ckeditor5-twig/twig/twigplugin';
+import 'ckeditor5-twig/twig/plugin.css';
+
+ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+            plugins: [ '...', TwigPlugin, CodeBlock ],
+            toolbar: [ '...',, 'twigCommands', 'codeBlock' ],
+            config: {
+                ...,
+                twig: { ... },
+                codeBlock: {
+                    indentSequence: false,
+                    languages: [
+                        { language: 'twig', label: 'Twig' }
+                        // You can add other languages here, see https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html#configuring-code-block-languages
+                    ]
+                }
+            }
+        } );
+```
+
+> The Twig plugin is also compatible with [HTML embed](https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html)
+> if using `<raw-html-embed>` tag instead of `<div class="raw-html-embed">`, but there are some issues.
+> As the embed html plugin parses its content, we cannot really use it for twig data:
+>   `<html>{% if a > b %}</html>` will be replaced by `{% if a &gt; b %}`
 
 ### Symfony integration
 

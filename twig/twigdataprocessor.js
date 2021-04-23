@@ -1,5 +1,5 @@
 import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
-import { b64ToUtf8, utf8ToB64 } from './utils';
+import { b64ToUtf8, htmlDecode, htmlEncode, utf8ToB64 } from './utils';
 import { srcToSvgSrc, svgSrcPrefix, svgSrcToSrc } from './image/utils';
 
 export default class TwigDataProcessor {
@@ -27,6 +27,7 @@ function twig2html( content ) {
     // We cannot use <div class="raw-html-embed"> in a twig template, as it's not possible to parse it.
     // We use a custom <raw-html-embed> tag instead
     content = content.replace( /<raw-html-embed>((?:(?!<\/raw-html-embed>).)*)<\/raw-html-embed>/gs, ( match, blockContent ) => '<raw-html-embed>' + utf8ToB64( blockContent ) + '</raw-html-embed>' );
+    content = content.replace( /<code-language-twig>((?:(?!<\/code-language-twig>).)*)<\/code-language-twig>/gs, ( match, blockContent ) => '<code-language-twig>' + utf8ToB64( blockContent ) + '</code-language-twig>' );
 
     // Encode attributes containing {{ }}
     content = content.replace( /="((?:(?!").)*{{-?\s*(?:(?:(?!\s*-?}}).)*)\s*-?}}(?:(?!").)*)"/gs, ( match, content ) => twigAttribute( content ) );
@@ -58,6 +59,7 @@ function twig2html( content ) {
 
     // Decode the previously encoded raw html blocks and replace <raw-html-embed> by <div>
     content = content.replace( /<raw-html-embed>((?:(?!<\/raw-html-embed>).)*)<\/raw-html-embed>/gs, ( match, blockContent ) => '<div class="raw-html-embed">' + b64ToUtf8( blockContent ) + '</div>' );
+    content = content.replace( /<code-language-twig>((?:(?!<\/code-language-twig>).)*)<\/code-language-twig>/gs, ( match, blockContent ) => '<pre><code class="language-html">' + htmlEncode( b64ToUtf8( blockContent ) ) + '</code></pre>' );
 
     // TODO here we can find "else" parts by parsing the dom ("if" and "for")
 
@@ -159,11 +161,6 @@ function twig2html( content ) {
     return content;
 }
 
-function htmlDecode( input ) {
-    const doc = new DOMParser().parseFromString( input, 'text/html' );
-    return doc.documentElement.textContent;
-}
-
 function html2twig( content ) {
     const parser = new DOMParser();
     const doc = parser.parseFromString( content, 'text/html' );
@@ -234,6 +231,7 @@ function html2twig( content ) {
 
     // We use custom tags in order to unescape twig strings
     content = content.replace( /<twig-string>((?:(?!<\/twig-string>).)*)<\/twig-string>/gs, ( match, blockContent ) => htmlDecode( blockContent ) );
+    content = content.replace( /<pre>\s*<code class="language-twig">((?:(?!<\/code>\s*<\/pre>).)*)<\/code>\s*<\/pre>/gs, ( match, blockContent ) => '<code-language-twig>' + htmlDecode( blockContent ) + '</code-language-twig>' );
 
     return content;
 }

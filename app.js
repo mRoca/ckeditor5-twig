@@ -9,6 +9,7 @@ import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
+import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock';
 
 /* twig plugin files */
 import TwigPlugin from './twig/twigplugin';
@@ -25,8 +26,8 @@ import 'highlight.js/styles/agate.css';
 
 ClassicEditor
     .create( document.querySelector( '#editor' ), {
-        plugins: [ Autosave, Essentials, Paragraph, Heading, List, Bold, Italic, Image, ImageResize, HtmlEmbed, TwigPlugin ],
-        toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'htmlEmbed', 'twigCommands' ],
+        plugins: [ Autosave, Essentials, Paragraph, Heading, List, Bold, Italic, Image, ImageResize, HtmlEmbed, CodeBlock, TwigPlugin ],
+        toolbar: [ 'heading', 'bold', 'italic', 'bulletedList', 'htmlEmbed', 'codeBlock', 'twigCommands' ],
         autosave: {
             save( editor ) {
                 return window.displaySource( editor );
@@ -34,6 +35,13 @@ ClassicEditor
         },
         twig: {
             variables: window.availableVariables // Defined in the index.html file
+        },
+        codeBlock: {
+            indentSequence: false,
+            languages: [
+                { language: 'twig', label: 'Twig' }
+                // You can add other languages here, see https://ckeditor.com/docs/ckeditor5/latest/features/code-blocks.html#configuring-code-block-languages
+            ]
         }
     } )
     .then( editor => {

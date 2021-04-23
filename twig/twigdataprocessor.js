@@ -33,7 +33,7 @@ function twig2html( content ) {
     content = content.replace( /="((?:(?!").)*{{-?\s*(?:(?:(?!\s*-?}}).)*)\s*-?}}(?:(?!").)*)"/gs, ( match, content ) => twigAttribute( content ) );
 
     // Comments: {# $1 #}
-    content = content.replace( /{#-?\s*((?:(?!\s*-?}}).)*)\s*-?#}/gs, ( match, content ) => twigComment( content ) );
+    content = content.replace( /{#-?\s*((?:(?!\s*-?#}).)*)\s*-?#}/gs, ( match, content ) => twigComment( content ) );
 
     // Expressions: {{ $1 }}
     content = content.replace( /{{-?\s*((?:(?!\s*-?}}).)*)\s*-?}}/gs, ( match, content ) => twigExpression( content ) );

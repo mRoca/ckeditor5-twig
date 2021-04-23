@@ -18,6 +18,7 @@
         {% set username = user.name|default('John Doe') %}
         <h1 class="username-{{ user.type }}">Welcome {{ username }} :-)</h1>
 
+        {# This image has a dynamic src #}
         <img src="{{ asset_url(user.avatar) }}" alt="User avatar">
 
         <p>This is a CKEditor Twig template plugin demo.</p>

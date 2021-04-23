@@ -1,6 +1,6 @@
 {
   "name": "ckeditor5-twig",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Twig template plugin for ckeditor5",
   "keywords": [
     "ckeditor5-plugin",

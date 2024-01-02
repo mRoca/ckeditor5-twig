@@ -10,8 +10,8 @@ jobs:
   javascript:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v2
-      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
       - run: yarn install --frozen-lockfile
 
       - run: yarn lint
@@ -23,7 +23,7 @@ jobs:
       run:
         working-directory: demo/symfonyapp
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'

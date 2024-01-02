@@ -48,6 +48,67 @@ export default class DisplayTwigVariablesCommand extends Command {
         return this._cachedTables[ hash ];
     }
 
+    _createCollapseLink( all = false ) {
+        const t = this.editor.t;
+
+        const linkEl = document.createElement( 'a' );
+        linkEl.href = '#';
+        linkEl.className = 'twig-variables-collapse';
+        linkEl.onclick = e => {
+            e.preventDefault();
+
+            const isOpened = e.target.closest( 'table' ).hasAttribute( 'data-opened' );
+            e.target.closest( 'table' ).toggleAttribute( 'data-opened' );
+            if ( all ) {
+                [ ...e.target.closest( 'table' ).getElementsByTagName( 'table' ) ].forEach( table => ( table.toggleAttribute( 'data-opened', !isOpened ) ) );
+            }
+        };
+
+        const expandSpanEl = textElement( 'span', t( 'twig.variables.table.expand' + ( all ? '-all' : '' ) ) );
+        expandSpanEl.className = 'twig-variables-table-expand';
+
+        const collapseSpanEl = textElement( 'span', t( 'twig.variables.table.collapse' + ( all ? '-all' : '' ) ) );
+        collapseSpanEl.className = 'twig-variables-table-collapse';
+
+        linkEl.append( expandSpanEl );
+        linkEl.append( collapseSpanEl );
+        return linkEl;
+    }
+
+    _search( tableEl, searchText ) {
+        [ ...tableEl.getElementsByTagName( 'table' ) ].forEach( table => ( table.toggleAttribute( 'data-opened', false ) ) );
+        [ ...tableEl.getElementsByClassName( 'variable-name' ) ].forEach( el => {
+            const elContent = el.textContent || el.innerText;
+            const isMatching = searchText && elContent.toUpperCase().indexOf( searchText.toUpperCase() ) >= 0;
+            el.toggleAttribute( 'data-searched', isMatching );
+
+            if ( isMatching ) {
+                this._openParentTable( el );
+            }
+        } );
+    }
+
+    _openParentTable( el ) {
+        const table = el.parentElement.closest( 'table' );
+        if ( !table ) {
+            return;
+        }
+        table.toggleAttribute( 'data-opened', true );
+        this._openParentTable( table );
+    }
+
+    _createSearchInput() {
+        const t = this.editor.t;
+        const searchEl = document.createElement( 'input' );
+        searchEl.type = 'search';
+        searchEl.placeholder = t( 'twig.variables.search' );
+        searchEl.oninput = () => {
+            this._search( searchEl.closest( 'table' ), searchEl.value || '' );
+        };
+
+        return searchEl;
+    }
+
     _createVariablesTable( vars, parents = [] ) {
         const t = this.editor.t;
 
@@ -67,11 +128,29 @@ export default class DisplayTwigVariablesCommand extends Command {
             headTrEl.append(
                 textElement( 'th', t( 'twig.variables.name' ) ),
                 textElement( 'th', t( 'twig.variables.type' ) ),
-                textElement( 'th', t( 'twig.variables.label' ) ),
-                textElement( 'th', '' )
+                textElement( 'th', t( 'twig.variables.label' ) )
             );
+            const thCollapseEl = document.createElement( 'th' );
+            thCollapseEl.append( this._createCollapseLink( true ) );
+            headTrEl.append( thCollapseEl );
+
+            const searchTrEl = document.createElement( 'tr' );
+            const searchThEl = document.createElement( 'th' );
+            searchThEl.append( this._createSearchInput() );
+
+            searchTrEl.append( searchThEl );
             theadEl.append( headTrEl );
+            theadEl.append( searchTrEl );
             tableEl.append( theadEl );
+        } else {
+            const theadCollapseEl = document.createElement( 'thead' );
+            const headTrEl = document.createElement( 'tr' );
+            const tdEl = document.createElement( 'th' );
+            tdEl.append( this._createCollapseLink() );
+
+            headTrEl.append( tdEl );
+            theadCollapseEl.append( headTrEl );
+            tableEl.append( theadCollapseEl );
         }
 
         const lines = Object.entries( vars ).map( ( [ name, conf ] ) => this._createVariableDomOutput( name, conf ) );
@@ -85,7 +164,7 @@ export default class DisplayTwigVariablesCommand extends Command {
         const tr = document.createElement( 'tr' );
 
         // Name
-        tr.append( textElement( 'th', name ) );
+        tr.append( textElement( 'th', name, 'variable-name' ) );
 
         // Type
         const cleanType = this._cleanType( conf.type );
@@ -345,8 +424,11 @@ function arrayItemName( name ) {
     return `${ name }Item`;
 }
 
-function textElement( tagName, text ) {
+function textElement( tagName, text, className ) {
     const el = document.createElement( tagName );
     el.innerText = text;
+    if ( className ) {
+        el.className = className;
+    }
     return el;
 }

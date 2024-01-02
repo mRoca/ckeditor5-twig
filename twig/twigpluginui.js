@@ -48,6 +48,11 @@ export default class TwigPluginUI extends Plugin {
             'twig.variables.type.float': 'Float',
             'twig.variables.type.datetime': 'Datetime',
             'twig.variables.type.unknown': 'Unknown',
+            'twig.variables.table.collapse': '< Collapse',
+            'twig.variables.table.collapse-all': '< Collapse all',
+            'twig.variables.table.expand': '> Expand',
+            'twig.variables.table.expand-all': '> Expand all',
+            'twig.variables.search': 'Search...',
             'twig.import-export': 'Import / Export',
             'twig.import': 'Import',
             'twig.import.label': 'You can import your own twig/html content by pasting it bellow.\nCaution: if the pasted template is not valid, you can break the output.'
@@ -83,6 +88,11 @@ export default class TwigPluginUI extends Plugin {
             'twig.variables.type.float': 'Nombre à virgule',
             'twig.variables.type.datetime': 'Date et heure',
             'twig.variables.type.unknown': 'Inconnu',
+            'twig.variables.table.collapse': '< Fermer',
+            'twig.variables.table.collapse-all': '< Tout fermer',
+            'twig.variables.table.expand': '> Ouvrir',
+            'twig.variables.table.expand-all': '> Tout ouvrir',
+            'twig.variables.search': 'Rechercher...',
             'twig.import-export': 'Import / Export',
             'twig.import': 'Importer',
             'twig.import.label': 'Vous pouvez importer votre propre twig/html en le collant ci-dessous.\nAttention: un template non valide peut entraîner la perte de données.'

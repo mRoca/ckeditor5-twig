@@ -76,22 +76,26 @@ table.twig-variables {
     font-size: 0.9em;
     border: 1px solid #ccc;
     border-collapse: collapse;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     width: 100%;
 }
+
 table.twig-variables tbody {
     border: 1px solid #ddd;
     padding: 3px;
 }
+
 table.twig-variables th, table.twig-variables td {
     padding: 4px 10px;
     text-align: left;
 }
+
 table.twig-variables th {
     font-weight: bold;
     letter-spacing: 1px;
 }
+
 table.twig-variables thead th {
     font-size: 1em;
     text-transform: uppercase
@@ -102,6 +106,41 @@ table.twig-variables tbody td[colspan] {
     padding-left: 50px;
     padding-right: 0;
     padding-bottom: 10px;
+}
+
+/* Child tables */
+table.twig-variables table > tbody {
+    display: none;
+}
+
+table.twig-variables table[data-opened] > tbody {
+    display: table-row-group;
+}
+
+table.twig-variables a.twig-variables-collapse {
+    text-decoration: none;
+    color: #448acb;
+    font-weight: normal;
+    font-size: 0.7em;
+}
+
+table.twig-variables[data-opened] > thead > tr > th > a.twig-variables-collapse span.twig-variables-table-collapse,
+table.twig-variables:not([data-opened]) > thead > tr > th > a.twig-variables-collapse span.twig-variables-table-expand {
+    display: inline;
+}
+
+table.twig-variables[data-opened] > thead > tr > th > a.twig-variables-collapse span.twig-variables-table-expand,
+table.twig-variables:not([data-opened]) > thead > tr > th > a.twig-variables-collapse span.twig-variables-table-collapse {
+    display: none;
+}
+
+/* Table search */
+table.twig-variables input[type=search] {
+    display: inline-block;
+}
+
+table.twig-variables [data-searched] {
+    background-color: yellow;
 }
 
 /* Type column */
@@ -138,23 +177,28 @@ table.twig-variables thead th:nth-child(4), table.twig-variables tbody td:nth-ch
 .twig-statement-doc {
     display: flex;
 }
+
 .twig-statement-doc > div {
     margin: auto;
     margin-top: 0;
 }
+
 .twig-statement-doc h3 {
     margin: 0;
     margin-bottom: 10px;
     border: none;
 }
+
 .twig-statement-doc a {
     font-size: 14px;
 }
+
 .twig-statement-doc pre {
     text-align: left;
     line-height: 14px;
     margin-top: 6px;
 }
+
 .twig-statement-doc pre code {
     padding: 0;
 }

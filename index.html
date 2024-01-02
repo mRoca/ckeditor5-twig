@@ -88,7 +88,7 @@
                         username: { type: 'string', label: 'The current user\'s username' },
                         favoriteColors: {
                             type: 'array',
-                                children: {
+                            children: {
                                 type: 'string'
                             }
                         }
@@ -104,7 +104,7 @@
         // Array of objects
         countries: {
             type: 'array',
-                children: {
+            children: {
                 type: 'object',
 				properties: {
                     name: { type: 'string' },
@@ -115,13 +115,18 @@
         // Array of arrays
         currentPositions: {
             type: 'array',
-                children: {
+            children: {
                 type: 'array',
-                    children: { type: 'float' }
+                children: { type: 'float' }
             }
+        },
+        // Big objects
+        locations: {
+            type: 'object',
+            properties: [...Array(100).keys()].reduce((obj, cur) => ({...obj, ['property-'+cur]: { type: 'int' }}), {})
         }
     };
 </script>
-<script src="bundle.js?t=1619178836"></script>
+<script src="bundle.js?t=1704234933"></script>
 </body>
 </html>

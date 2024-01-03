@@ -20,7 +20,7 @@ module.exports = {
                 use: [ 'raw-loader' ]
             },
             {
-                test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+                test: [ /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/, /\.css$/ ],
                 use: [
                     {
                         loader: 'style-loader',
@@ -31,22 +31,19 @@ module.exports = {
                             }
                         }
                     },
+                    'css-loader',
                     {
                         loader: 'postcss-loader',
-                        options: styles.getPostCssConfig( {
-                            themeImporter: {
-                                themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-                            },
-                            minify: true
-                        } )
+                        options: {
+                            postcssOptions: styles.getPostCssConfig( {
+                                themeImporter: {
+                                    themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+                                },
+                                minify: true
+                            } )
+                        }
                     }
                 ]
-            },
-
-            {
-                test: /\.css$/i,
-                exclude: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
             }
         ]
     },

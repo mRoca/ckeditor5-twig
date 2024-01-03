@@ -50,6 +50,7 @@ ClassicEditor
 
         // Expose for playing in the console.
         window.editor = editor;
+        window.displaySource( editor );
     } )
     .catch( error => {
         console.error( error.stack );
@@ -61,6 +62,7 @@ window.displaySource = function( editor ) {
     prettydiff.options.force_indent = true;
     prettydiff.options.source = editor.getData();
 
-    document.getElementById( 'output' ).innerText = prettydiff();
-    hljs.highlightBlock( document.getElementById( 'output' ) );
+    document.getElementById( 'output' ).textContent = prettydiff();
+    document.getElementById( 'output' ).removeAttribute( 'data-highlighted' );
+    hljs.highlightElement( document.getElementById( 'output' ) );
 };

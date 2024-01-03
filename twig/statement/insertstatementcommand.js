@@ -1,12 +1,12 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget';
+import { findOptimalInsertionRange } from '@ckeditor/ckeditor5-widget';
 import first from '@ckeditor/ckeditor5-utils/src/first';
 
 export default class InsertTwigStatementCommand extends Command {
     execute( options ) {
         options = options || {};
         const editor = this.editor;
-        const insertPosition = findOptimalInsertionPosition( editor.model.document.selection, this.editor.model );
+        const insertRange = findOptimalInsertionRange( editor.model.document.selection, this.editor.model );
 
         editor.model.change( writer => {
             const el = createTwigStatement( writer, options );
@@ -15,7 +15,7 @@ export default class InsertTwigStatementCommand extends Command {
             if ( el.getNodeByPath( [ 0, 0 ] ) ) {
                 posOffset = el.getNodeByPath( [ 0, 0 ] ).data.length;
             }
-            editor.model.insertContent( el, insertPosition );
+            editor.model.insertContent( el, insertRange );
             writer.setSelection( writer.createPositionAt( el.getNodeByPath( [ 0 ] ), posOffset ) );
         } );
     }

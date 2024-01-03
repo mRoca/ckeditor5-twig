@@ -50,11 +50,14 @@ Encore
     .addLoader( {
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
         loader: 'postcss-loader',
-        options: styles.getPostCssConfig( {
-            themeImporter: {
-                themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-            }
-        } )
+        options: {
+            postcssOptions: styles.getPostCssConfig( {
+                themeImporter: {
+                    themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+                },
+                minify: true
+            } )
+        }
     } )
 // ===============
 ;

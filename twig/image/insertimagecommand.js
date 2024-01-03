@@ -1,4 +1,3 @@
-import { insertImage, isImageAllowed } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { toArray } from '@ckeditor/ckeditor5-utils';
 import { Command } from '@ckeditor/ckeditor5-core';
 import Swal from 'sweetalert2';
@@ -10,7 +9,7 @@ export default class InsertTwigImageCommand extends Command {
         const selection = model.document.selection;
         const selectedEl = selection.getSelectedElement();
 
-        this.isEnabled = isImageAllowed( model );
+        this.isEnabled = this.editor.plugins.get( 'ImageUtils' ).isImageAllowed();
 
         if ( !!selectedEl && selectedEl.is( 'element', 'image' ) ) {
             this.value = selectedEl.getAttribute( 'src' );
@@ -20,8 +19,6 @@ export default class InsertTwigImageCommand extends Command {
     }
 
     async execute( options ) {
-        const model = this.editor.model;
-
         options = options || {};
 
         if ( !options.source ) {
@@ -32,8 +29,11 @@ export default class InsertTwigImageCommand extends Command {
             return;
         }
 
-        for ( const src of toArray( options.source ) ) {
-            insertImage( model, { src: srcToSvgSrc( src ) } );
+        for ( let src of toArray( options.source ) ) {
+            if ( !src.indexOf( '{{' ) >= 0 ) {
+                src = '{{ ' + src + ' }}';
+            }
+            this.editor.plugins.get( 'ImageUtils' ).insertImage( { src: srcToSvgSrc( src ) }, null, 'imageInline', { setImageSizes: false } );
         }
     }
 

@@ -3,32 +3,33 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-		"dev-server": "encore dev-server",
-		"dev": "encore dev",
-		"watch": "encore dev --watch",
-		"build": "encore production --progress"
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
     },
     "dependencies": {
-		"@ckeditor/ckeditor5-basic-styles": "^26.0.0",
-		"@ckeditor/ckeditor5-build-classic": "^26.0.0",
-		"@ckeditor/ckeditor5-essentials": "^26.0.0",
-		"@ckeditor/ckeditor5-heading": "^26.0.0",
-		"@ckeditor/ckeditor5-html-embed": "^26.0.0",
-		"@ckeditor/ckeditor5-image": "^26.0.0",
-		"@ckeditor/ckeditor5-paragraph": "^26.0.0",
-		"ckeditor5-twig": "mRoca/ckeditor5-twig#master"
+        "@ckeditor/ckeditor5-basic-styles": "^40.2.0",
+        "@ckeditor/ckeditor5-build-classic": "^40.2.0",
+        "@ckeditor/ckeditor5-essentials": "^40.2.0",
+        "@ckeditor/ckeditor5-heading": "^40.2.0",
+        "@ckeditor/ckeditor5-html-embed": "^40.2.0",
+        "@ckeditor/ckeditor5-image": "^40.2.0",
+        "@ckeditor/ckeditor5-paragraph": "^40.2.0",
+        "ckeditor5-twig": "mRoca/ckeditor5-twig#master"
     },
     "devDependencies": {
-		"@babel/preset-env": "^7.23.7",
-		"@ckeditor/ckeditor5-dev-translations": "^39.5.0",
-		"@symfony/stimulus-bridge": "^3.2.2",
-		"@symfony/webpack-encore": "^4.5.0",
-		"@webpack-cli/serve": "^2.0.5",
-		"core-js": "^3.0.0",
-		"regenerator-runtime": "^0.14.1",
-		"stimulus": "^3.2.2",
-		"webpack-notifier": "^1.6.0",
+        "@babel/core": "^7.23.7",
+        "@babel/preset-env": "^7.23.7",
+        "@ckeditor/ckeditor5-dev-translations": "^39.5.0",
+        "@symfony/stimulus-bridge": "^3.2.2",
+        "@symfony/webpack-encore": "^4.5.0",
+        "@webpack-cli/serve": "^2.0.5",
+        "core-js": "^3.35.0",
+        "regenerator-runtime": "^0.14.1",
+        "stimulus": "^3.2.2",
         "webpack": "^5.89.0",
-        "webpack-cli": "^5.1.4"
+        "webpack-cli": "^5.1.4",
+        "webpack-notifier": "^1.6.0"
     }
 }

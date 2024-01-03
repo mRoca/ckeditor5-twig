@@ -2,7 +2,6 @@
 
 namespace App\Extractor;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\Extractor\SerializerExtractor;
@@ -10,7 +9,7 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 
 /**
  * TwigVariablesExtractor allows to transform a PHP value into a list of CKEditor Twig plugin variables.
@@ -62,7 +61,7 @@ class TwigVariablesExtractor
 
     protected static function createPropertyInfoExtractor(): PropertyInfoExtractorInterface
     {
-        $serializerClassMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializerClassMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $serializerExtractor = new SerializerExtractor($serializerClassMetadataFactory);
 
         $phpDocExtractor = new PhpDocExtractor();
@@ -83,7 +82,7 @@ class TwigVariablesExtractor
         );
     }
 
-    protected function extractItemInfos($item, array $context = []): TwigVariable
+    protected function extractItemInfos(mixed $item, array $context = []): TwigVariable
     {
         // Type per name
         if (is_string($item) && in_array($item, TwigVariable::$TYPES, true)) {
@@ -145,6 +144,8 @@ class TwigVariablesExtractor
         }
 
         $context['parents'][] = $className;
+
+        /** @var array<string, TwigVariable> $properties */
         $properties = array_flip($this->propertyInfoExtractor->getProperties($className, $context) ?: []);
         foreach ($properties as $key => $nothing) {
             $properties[$key] = $this->propertyInfoTypeToTwigVariable($this->propertyInfoExtractor->getTypes($className, $key), $context);
@@ -171,7 +172,7 @@ class TwigVariablesExtractor
     protected function propertyInfoTypeToTwigVariable(?array $infoTypes, array $context = []): TwigVariable
     {
         // The extractor can find 0, 1 or more types. E.G.: array|Foobar[]
-        if (empty(array_filter($infoTypes ?: []))) {
+        if (!is_array($infoTypes) || empty($infoTypes)) {
             return new TwigVariable(TwigVariable::TYPE_UNKNOWN);
         }
 
@@ -183,9 +184,9 @@ class TwigVariablesExtractor
         if ($isCollection) {
             // We ignore the collection key type for now, maybe later ?
             /** @var Type|null $valueType The first not null collection items type */
-            $valueType = array_reduce($infoTypes, static fn (?Type $carry, Type $cur) => $carry ?: $cur->getCollectionValueType());
+            $valueType = array_reduce($infoTypes, static fn (?Type $carry, Type $cur) => $carry ?: $cur->getCollectionValueTypes()[0] ?? null);
 
-            return new TwigVariable(TwigVariable::TYPE_ARRAY, null, $nullable, $this->propertyInfoTypeToTwigVariable([$valueType], $context));
+            return new TwigVariable(TwigVariable::TYPE_ARRAY, null, $nullable, $this->propertyInfoTypeToTwigVariable(array_filter([$valueType]), $context));
         }
 
         // Scalar
@@ -229,11 +230,11 @@ class TwigVariablesExtractor
             return true;
         }
 
-        try {
-            $reflection = new \ReflectionClass($className);
-        } catch (\ReflectionException $e) {
+        if (!class_exists($className)) {
             return false;
         }
+
+        $reflection = new \ReflectionClass($className);
 
         return $reflection->isIterable() || $reflection->implementsInterface('Traversable');
     }

@@ -2071,7 +2071,7 @@ ci-info@^3.2.0:
 
 ckeditor5-twig@mRoca/ckeditor5-twig#master:
   version "0.0.14"
-  resolved "https://codeload.github.com/mRoca/ckeditor5-twig/tar.gz/942dc5af583051c92b305e776e3547e9de237f1f"
+  resolved "https://codeload.github.com/mRoca/ckeditor5-twig/tar.gz/5793df2013b2716875ea0abd44911bc6c3099c0b"
   dependencies:
     "@ckeditor/ckeditor5-core" "^40.2.0"
     "@ckeditor/ckeditor5-engine" "^40.2.0"

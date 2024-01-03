@@ -127,7 +127,7 @@ ClassicEditor
 A PHP `TwigVariablesExtractor` class allows to convert an array of items (objects, entities, arrays, types, ...)
 into a `variables` array that can be used as plugin config.
 
-This class is currently located into `demo/symfonyapp/src/Extractor`, and will later be moved into a dedicated repository
+This class is currently located into `demo/symfonyapp/src/Extractor`, and could later be moved into a dedicated repository
 and composer package.
 
 **Extractor options**

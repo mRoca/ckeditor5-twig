@@ -39,16 +39,16 @@ class TwigVariable implements \JsonSerializable
     /**
      * Properties associative array must only be set when type === "object".
      *
-     * @var TwigVariable[]
+     * @var array<string, TwigVariable>
      */
     public array $properties = [];
 
     /**
      * TwigVariable constructor.
      *
-     * @param TwigVariable|TwigVariable[] $childrenOrProperties
+     * @param TwigVariable|TwigVariable[]|null $childrenOrProperties
      */
-    public function __construct(string $type, ?string $label = null, bool $nullable = false, $childrenOrProperties = null)
+    public function __construct(string $type, string $label = null, bool $nullable = false, array|TwigVariable $childrenOrProperties = null)
     {
         if ('bool' === $type) {
             $type = self::TYPE_BOOLEAN;
@@ -58,7 +58,7 @@ class TwigVariable implements \JsonSerializable
         }
 
         if (!in_array($type, self::$TYPES, true)) {
-            throw new \InvalidArgumentException("Invalid twig variable type: $type");
+            throw new \InvalidArgumentException("Invalid twig variable type: {$type}");
         }
 
         $this->type = $type;

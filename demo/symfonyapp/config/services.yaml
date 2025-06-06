@@ -19,6 +19,13 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    HelloNico\Twig\DumpExtension:
+    Symfony\Component\VarDumper\Cloner\VarCloner:
+        public: true
+
+    # replace the DebugExtension by the DumpExtension to have beautiful HTML dumps in twig
+    twig.extension.debug:
+        class: Symfony\Bridge\Twig\Extension\DumpExtension
+        arguments:
+            - '@Symfony\Component\VarDumper\Cloner\VarCloner'
         tags:
             - { name: twig.extension }

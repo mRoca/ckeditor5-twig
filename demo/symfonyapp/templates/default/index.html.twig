@@ -11,7 +11,7 @@
 		}
 	</style>
 
-	{% dump({ phpConfig: variables, jsonConfig: [ variables|json_encode(constant('JSON_PRETTY_PRINT')) ] }) %}
+	{{ dump({ phpConfig: variables, jsonConfig: [ variables|json_encode(constant('JSON_PRETTY_PRINT')) ] }) }}
 
 	<div data-controller="editor" data-editor-variables-value="{{ variables|json_encode|e('html_attr') }}">
 		{%- verbatim -%}

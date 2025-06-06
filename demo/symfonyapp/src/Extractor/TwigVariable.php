@@ -7,16 +7,16 @@ namespace App\Extractor;
  */
 class TwigVariable implements \JsonSerializable
 {
-    public const TYPE_OBJECT = 'object';
-    public const TYPE_ARRAY = 'array';
-    public const TYPE_STRING = 'string';
-    public const TYPE_BOOLEAN = 'boolean';
-    public const TYPE_INTEGER = 'integer';
-    public const TYPE_FLOAT = 'float';
-    public const TYPE_DATETIME = 'datetime';
-    public const TYPE_UNKNOWN = 'unknown';
+    public const string TYPE_OBJECT = 'object';
+    public const string TYPE_ARRAY = 'array';
+    public const string TYPE_STRING = 'string';
+    public const string TYPE_BOOLEAN = 'boolean';
+    public const string TYPE_INTEGER = 'integer';
+    public const string TYPE_FLOAT = 'float';
+    public const string TYPE_DATETIME = 'datetime';
+    public const string TYPE_UNKNOWN = 'unknown';
 
-    public static array $TYPES = [
+    public const array TYPES = [
         self::TYPE_OBJECT,
         self::TYPE_ARRAY,
         self::TYPE_STRING,
@@ -29,6 +29,10 @@ class TwigVariable implements \JsonSerializable
 
     public string $type;
     public bool $nullable = false;
+
+    /**
+     * Phpdoc related to the variable.
+     */
     public ?string $label = null;
 
     /**
@@ -48,7 +52,7 @@ class TwigVariable implements \JsonSerializable
      *
      * @param TwigVariable|TwigVariable[]|null $childrenOrProperties
      */
-    public function __construct(string $type, string $label = null, bool $nullable = false, array|TwigVariable $childrenOrProperties = null)
+    public function __construct(string $type, ?string $label = null, bool $nullable = false, array|TwigVariable|null $childrenOrProperties = null)
     {
         if ('bool' === $type) {
             $type = self::TYPE_BOOLEAN;
@@ -57,7 +61,7 @@ class TwigVariable implements \JsonSerializable
             $type = self::TYPE_INTEGER;
         }
 
-        if (!in_array($type, self::$TYPES, true)) {
+        if (!in_array($type, self::TYPES, true)) {
             throw new \InvalidArgumentException("Invalid twig variable type: {$type}");
         }
 

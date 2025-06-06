@@ -6,25 +6,32 @@ class User
 {
     // Private properties with getter
     private string $firstname;
-    private string $lastname;
+    private ?string $lastname;
     private \DateTime $birthdate;
+
+    // Public properties
 
     /**
      * @var PostalAddress|null the user postal address, if we know it
      */
-    private ?PostalAddress $address = null;
+    public ?PostalAddress $address = null;
 
     /**
      * Is the user enabled?
      */
-    private bool $isEnabled = true;
+    public bool $isEnabled = true;
 
     /**
-     * The user's favorites numbers as an array of float. Why not!
+     * Another user that manages this user to test recursivity.
+     */
+    public User $manager;
+
+    /**
+     * The user's favorite numbers as an array of float. Why not!
      *
      * @var array|float[]
      */
-    private array $favoriteNumbers = [];
+    public array $favoriteNumbers = [];
 
     // Private properties without getter
 
@@ -37,7 +44,7 @@ class User
         return $this->firstname;
     }
 
-    public function getLastname(): string
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
@@ -45,23 +52,5 @@ class User
     public function getBirthdate(): \DateTime
     {
         return $this->birthdate;
-    }
-
-    public function getAddress(): ?PostalAddress
-    {
-        return $this->address;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->isEnabled;
-    }
-
-    /**
-     * @return float[]
-     */
-    public function getFavoriteNumbers(): array
-    {
-        return $this->favoriteNumbers;
     }
 }

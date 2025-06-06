@@ -22,7 +22,7 @@ class DefaultController extends AbstractController
         // Option 3: TwigVariablesExtractor & variables defined in an array
         $extractor = new TwigVariablesExtractor();
         $variables = $extractor->extract([
-            'app' => [                                      // Manually defined config
+            'app' => [                                      // Manually defined config, it will be kept as it
                 'type' => 'object',
                 'label' => 'All app related global variables',
                 'properties' => [
@@ -43,6 +43,7 @@ class DefaultController extends AbstractController
             ],
         ]);
 
+        // dd($variables);
         return $this->render('default/index.html.twig', [
             'variables' => $variables,
         ]);

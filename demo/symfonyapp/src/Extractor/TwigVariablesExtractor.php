@@ -39,9 +39,9 @@ class TwigVariablesExtractor
     /**
      * @param array{circular_reference_limit?: int, max_depth?: int} $options
      */
-    public function __construct(protected ?PropertyInfoExtractorInterface $propertyInfoExtractor = null, array $options = [])
+    public function __construct(private PropertyInfoExtractorInterface $propertyInfoExtractor, array $options = [])
     {
-        $this->propertyInfoExtractor ??= self::createPropertyInfoExtractor();
+        $this->propertyInfoExtractor = self::createPropertyInfoExtractor();
 
         if (array_key_exists('circular_reference_limit', $options)) {
             $this->circularReferenceLimit = (int) $options['circular_reference_limit'];
@@ -63,11 +63,7 @@ class TwigVariablesExtractor
     public function extract(array|object $items, array $context = []): array
     {
         if (is_array($items)) {
-            foreach ($items as $key => $type) {
-                $items[$key] = $this->extractItemInfos($type, $context);
-            }
-
-            return $items;
+            return array_map(fn (mixed $type) => $this->extractItemInfos($type, $context), $items);
         }
 
         if (is_object($items)) {
